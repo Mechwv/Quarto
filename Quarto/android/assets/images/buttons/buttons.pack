@@ -1,0 +1,19 @@
+
+buttons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+button_multiplayer
+  rotate: false
+  xy: 1, 217
+  size: 706, 214
+  orig: 706, 214
+  offset: 0, 0
+  index: -1
+button_singleplayer
+  rotate: false
+  xy: 1, 1
+  size: 706, 214
+  orig: 706, 214
+  offset: 0, 0
+  index: -1

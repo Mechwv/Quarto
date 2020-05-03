@@ -1,0 +1,117 @@
+
+simple_figures.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+FigureHRHB
+  rotate: false
+  xy: 1, 103
+  size: 58, 138
+  orig: 58, 138
+  offset: 0, 0
+  index: -1
+FigureHRHW
+  rotate: false
+  xy: 61, 103
+  size: 58, 138
+  orig: 58, 138
+  offset: 0, 0
+  index: -1
+FigureHRNB
+  rotate: false
+  xy: 121, 103
+  size: 58, 138
+  orig: 58, 138
+  offset: 0, 0
+  index: -1
+FigureHRNW
+  rotate: false
+  xy: 181, 103
+  size: 58, 138
+  orig: 58, 138
+  offset: 0, 0
+  index: -1
+FigureHSHB
+  rotate: false
+  xy: 241, 116
+  size: 58, 125
+  orig: 58, 125
+  offset: 0, 0
+  index: -1
+FigureHSHW
+  rotate: false
+  xy: 301, 116
+  size: 58, 125
+  orig: 58, 125
+  offset: 0, 0
+  index: -1
+FigureHSNB
+  rotate: false
+  xy: 361, 116
+  size: 58, 125
+  orig: 58, 125
+  offset: 0, 0
+  index: -1
+FigureHSNW
+  rotate: false
+  xy: 421, 116
+  size: 58, 125
+  orig: 58, 125
+  offset: 0, 0
+  index: -1
+FigureLRHB
+  rotate: false
+  xy: 1, 1
+  size: 58, 100
+  orig: 58, 100
+  offset: 0, 0
+  index: -1
+FigureLRHW
+  rotate: false
+  xy: 61, 1
+  size: 58, 100
+  orig: 58, 100
+  offset: 0, 0
+  index: -1
+FigureLRNB
+  rotate: false
+  xy: 121, 1
+  size: 58, 100
+  orig: 58, 100
+  offset: 0, 0
+  index: -1
+FigureLRNW
+  rotate: false
+  xy: 181, 1
+  size: 58, 100
+  orig: 58, 100
+  offset: 0, 0
+  index: -1
+FigureLSHB
+  rotate: false
+  xy: 241, 14
+  size: 58, 100
+  orig: 58, 100
+  offset: 0, 0
+  index: -1
+FigureLSHW
+  rotate: false
+  xy: 301, 14
+  size: 58, 100
+  orig: 58, 100
+  offset: 0, 0
+  index: -1
+FigureLSNB
+  rotate: false
+  xy: 361, 14
+  size: 58, 100
+  orig: 58, 100
+  offset: 0, 0
+  index: -1
+FigureLSNW
+  rotate: false
+  xy: 421, 14
+  size: 58, 100
+  orig: 58, 100
+  offset: 0, 0
+  index: -1
