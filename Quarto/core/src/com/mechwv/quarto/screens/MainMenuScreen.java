@@ -2,6 +2,8 @@ package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.SoundLoader;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,8 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mechwv.quarto.GameRoot;
+import com.mechwv.quarto.managers.AssetsLoader;
 
 public class MainMenuScreen implements Screen {
 
@@ -21,13 +25,14 @@ public class MainMenuScreen implements Screen {
 
     //Parameter for drawing the buttons
     private OrthographicCamera camera;
+    private Viewport viewport;
     private final TextureAtlas buttons;
     private final Button SinglePButton;
     private final ImageButton MultiPButton;
     private final Skin skin;
 
     //Parameter for Sound
-    private final com.badlogic.gdx.audio.Sound SFXClick;
+    private final Sound SFXClick;
 
     public MainMenuScreen(final GameRoot game){
 
@@ -38,12 +43,13 @@ public class MainMenuScreen implements Screen {
         game.Screeny = Gdx.graphics.getHeight();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,  game.Screenx,  game.Screeny);
+        viewport = new StretchViewport(game.virtual_screen_width,game.virtual_screen_height);
+        viewport.setCamera(camera);
+        stage = new Stage(viewport,game.spriteBatch);
 
-        stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        buttons = new TextureAtlas("images/buttons/buttons.pack");
+        buttons = game.assets.manager.get(game.assets.buttons);
         skin = new Skin(buttons);
         skin.addRegions(buttons);
 
@@ -71,13 +77,12 @@ public class MainMenuScreen implements Screen {
         stage.addActor(SinglePButton);
         stage.addActor(MultiPButton);
 
-        SFXClick = Gdx.audio.newSound(Gdx.files.internal("sounds/wooden-click.wav"));
+        SFXClick = game.assets.manager.get(game.assets.SFXclick);
 
     }
 
     @Override
     public void show() {
-        // Gdx.input.setInputProcessor(stage);
         render(0);
     }
 
@@ -107,7 +112,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height);
     }
 
     @Override
