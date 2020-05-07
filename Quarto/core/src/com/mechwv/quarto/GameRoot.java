@@ -2,6 +2,7 @@ package com.mechwv.quarto;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -33,8 +34,6 @@ public class GameRoot extends Game {
 		font = new BitmapFont();
 		assets.load();
 		assets.manager.finishLoading();
-
-
         FileHandle fontFile = Gdx.files.internal("fonts/russoone.ttf");
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();

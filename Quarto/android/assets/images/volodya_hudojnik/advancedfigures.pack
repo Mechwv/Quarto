@@ -10,7 +10,7 @@ FigureHRHW
   orig: 222, 342
   offset: 0, 0
   index: -1
-FigureHRNW
+FigureHRNB
   rotate: false
   xy: 1, 321
   size: 222, 342
@@ -66,7 +66,7 @@ FigureHRHB
   orig: 216, 318
   offset: 0, 0
   index: -1
-FigureHRNB
+FigureHRNW
   rotate: false
   xy: 219, 1
   size: 216, 318
