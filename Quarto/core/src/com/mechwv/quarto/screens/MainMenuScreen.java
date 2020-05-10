@@ -2,15 +2,19 @@ package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mechwv.quarto.GameRoot;
 
@@ -21,81 +25,90 @@ public class MainMenuScreen implements Screen {
 
     //Parameter for drawing the buttons
     private OrthographicCamera camera;
-    private final TextureAtlas buttons;
-    private final Button SinglePButton;
+    private Viewport viewport;
+    private final Button singlePButton;
     private final ImageButton MultiPButton;
-    private final Skin skin;
 
     //Parameter for Sound
-    private final com.badlogic.gdx.audio.Sound SFXClick;
+    private Texture myTexture;
+    private TextureRegion myTextureRegion;
+    private Texture background;
+    private Music SFXClick;
+    private Music menuMusic;
 
     public MainMenuScreen(final GameRoot game){
 
         //Set up our assets
         this.game = game;
 
-        game.Screenx = Gdx.graphics.getWidth();
-        game.Screeny = Gdx.graphics.getHeight();
-
+        game.screenx = Gdx.graphics.getWidth();
+        game.screeny = Gdx.graphics.getHeight();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,  game.Screenx,  game.Screeny);
+        viewport = new StretchViewport(game.virtual_screen_width,game.virtual_screen_height);
+        viewport.setCamera(camera);
+        stage = new Stage(viewport,game.spriteBatch);
 
-        stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        buttons = new TextureAtlas("images/buttons/buttons.pack");
-        skin = new Skin(buttons);
-        skin.addRegions(buttons);
-
-        SinglePButton = new ImageButton(skin.getDrawable("button_singleplayer"));
-        SinglePButton.setPosition(( game.Screenx/2-SinglePButton.getWidth()/2),( game.Screeny/2-SinglePButton.getHeight()/2));
-        SinglePButton.addListener(new ClickListener(){
-            public void clicked(InputEvent event, float x, float y){
-                    Gdx.app.log("RRRRR", "click");
-                    SFXClick.play();
-                    game.setScreen(new SinglePlayerScreen(game));
-                    dispose();
+        menuMusic = game.assets.manager.get(game.assets.menuMusic);
+        menuMusic.play();
+        menuMusic.setLooping(true);
+        myTexture = game.assets.manager.get(game.assets.singleplayer);
+        myTextureRegion = new TextureRegion(myTexture);
+        Drawable drawable = new TextureRegionDrawable(myTextureRegion);
+        singlePButton = new ImageButton(drawable);
+        singlePButton.setDisabled(true);
+        singlePButton.setPosition(( game.screenx /2- singlePButton.getWidth()/2),( game.screeny /2- singlePButton.getHeight()/2-200));
+        singlePButton.addListener(new ChangeListener(){
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.log("RRRRR", "click");
+                SFXClick.play();
+                menuMusic.stop();
+                menuMusic.setLooping(false);
+                //game.setScreen(new SinglePlayerScreen(game));
+                dispose();
             }
         });
-
-        MultiPButton = new ImageButton(skin.getDrawable("button_multiplayer"));
-        MultiPButton.setPosition(( game.Screenx/2-SinglePButton.getWidth()/2),( game.Screeny/2-SinglePButton.getHeight()/2-MultiPButton.getHeight()-50));
-        MultiPButton.addListener(new ClickListener() {
-             public void clicked(InputEvent event, float x, float y) {
-                     SFXClick.play();
-                     Gdx.app.log("RRRRR", "click1");
-                     //game.setScreen(new MultiPlayerScreen(game));
-                    dispose();
-                 }
+        myTexture = game.assets.manager.get(game.assets.multiplayer);
+        myTextureRegion = new TextureRegion(myTexture);
+        drawable = new TextureRegionDrawable(myTextureRegion);
+        MultiPButton = new ImageButton(drawable);
+        MultiPButton.setPosition(( game.screenx /2-MultiPButton.getWidth()/2),( game.screeny /2-MultiPButton.getHeight()/2-MultiPButton.getHeight()-250));
+        MultiPButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                SFXClick.play();
+                Gdx.app.log("RRRRR", "click1");
+                menuMusic.stop();
+                menuMusic.setLooping(false);
+                game.setScreen(new MultiPlayerScreen(game));
+                dispose();
+            }
          });
-        stage.addActor(SinglePButton);
+        background = game.assets.manager.get(game.assets.Bgr);
+        stage.addActor(singlePButton);
         stage.addActor(MultiPButton);
 
-        SFXClick = Gdx.audio.newSound(Gdx.files.internal("sounds/wooden-click.wav"));
-
+        SFXClick = game.assets.manager.get(game.assets.SFXclick);
     }
 
     @Override
     public void show() {
-        // Gdx.input.setInputProcessor(stage);
         render(0);
     }
 
     @Override
     public void render(float delta) {
 
-        Gdx.gl.glClearColor(141/255f, 97/255f, 66/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
         game.spriteBatch.setProjectionMatrix(camera.combined);
-        if (Gdx.input.isTouched()){
-            //Screenx = Gdx.input.getX();
-            //Screeny = Gdx.input.getY();
-        }
         game.spriteBatch.begin();
-        game.font.draw(game.spriteBatch, "X =" +  game.Screenx, 10, 100);
-        game.font.draw(game.spriteBatch, "Y =" + game.Screeny, 10, 200);
+        game.spriteBatch.draw(background, 0, 0,game.virtual_screen_width,game.virtual_screen_height);
+        //game.font.draw(game.spriteBatch, "X =" +  game.screenx, 10, 100);
+        //game.font.draw(game.spriteBatch, "Y =" + game.screeny, 10, 200);
         game.spriteBatch.end();
 
         stage.draw();
@@ -103,11 +116,9 @@ public class MainMenuScreen implements Screen {
 
     }
 
-
-
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height);
     }
 
     @Override

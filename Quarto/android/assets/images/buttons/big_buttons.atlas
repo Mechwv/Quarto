@@ -1,0 +1,62 @@
+
+big_buttons.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+FigureHRHB
+  rotate: false
+  xy: 524, 591
+  size: 117, 273
+  orig: 216, 318
+  offset: 50, 33
+  index: -1
+FigureHRHW
+  rotate: false
+  xy: 280, 580
+  size: 124, 284
+  orig: 222, 342
+  offset: 48, 25
+  index: -1
+FigureHRNB
+  rotate: false
+  xy: 2, 289
+  size: 124, 290
+  orig: 222, 342
+  offset: 47, 22
+  index: -1
+FigureHRNW
+  rotate: false
+  xy: 643, 604
+  size: 121, 260
+  orig: 216, 318
+  offset: 53, 39
+  index: -1
+FigureHSHB
+  rotate: false
+  xy: 144, 591
+  size: 134, 273
+  orig: 222, 342
+  offset: 42, 37
+  index: -1
+FigureHSHW
+  rotate: false
+  xy: 406, 578
+  size: 116, 286
+  orig: 222, 342
+  offset: 53, 18
+  index: -1
+FigureHSNB
+  rotate: false
+  xy: 2, 2
+  size: 124, 285
+  orig: 222, 342
+  offset: 44, 23
+  index: -1
+FigureHSNW
+  rotate: false
+  xy: 2, 581
+  size: 140, 283
+  orig: 222, 342
+  offset: 38, 25
+  index: -1

@@ -1,0 +1,122 @@
+
+advancedfigures.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+FigureHRHW
+  rotate: false
+  xy: 1, 665
+  size: 222, 342
+  orig: 222, 342
+  offset: 0, 0
+  index: -1
+FigureHRNB
+  rotate: false
+  xy: 1, 321
+  size: 222, 342
+  orig: 222, 342
+  offset: 0, 0
+  index: -1
+FigureHSHB
+  rotate: false
+  xy: 225, 665
+  size: 222, 342
+  orig: 222, 342
+  offset: 0, 0
+  index: -1
+FigureHSHW
+  rotate: false
+  xy: 225, 321
+  size: 222, 342
+  orig: 222, 342
+  offset: 0, 0
+  index: -1
+FigureHSNB
+  rotate: false
+  xy: 449, 665
+  size: 222, 342
+  orig: 222, 342
+  offset: 0, 0
+  index: -1
+FigureHSNW
+  rotate: false
+  xy: 449, 321
+  size: 222, 342
+  orig: 222, 342
+  offset: 0, 0
+  index: -1
+FigureLRNW
+  rotate: false
+  xy: 673, 665
+  size: 222, 342
+  orig: 222, 342
+  offset: 0, 0
+  index: -1
+FigureLSHB
+  rotate: false
+  xy: 673, 321
+  size: 222, 342
+  orig: 222, 342
+  offset: 0, 0
+  index: -1
+FigureHRHB
+  rotate: false
+  xy: 1, 1
+  size: 216, 318
+  orig: 216, 318
+  offset: 0, 0
+  index: -1
+FigureHRNW
+  rotate: false
+  xy: 219, 1
+  size: 216, 318
+  orig: 216, 318
+  offset: 0, 0
+  index: -1
+FigureLRHB
+  rotate: false
+  xy: 437, 1
+  size: 216, 318
+  orig: 216, 318
+  offset: 0, 0
+  index: -1
+FigureLRHW
+  rotate: false
+  xy: 655, 1
+  size: 216, 318
+  orig: 216, 318
+  offset: 0, 0
+  index: -1
+
+advancedfigures2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+FigureLRNB
+  rotate: false
+  xy: 1, 1
+  size: 216, 318
+  orig: 216, 318
+  offset: 0, 0
+  index: -1
+FigureLSHW
+  rotate: false
+  xy: 219, 1
+  size: 216, 318
+  orig: 216, 318
+  offset: 0, 0
+  index: -1
+FigureLSNB
+  rotate: false
+  xy: 437, 1
+  size: 216, 318
+  orig: 216, 318
+  offset: 0, 0
+  index: -1
+FigureLSNW
+  rotate: false
+  xy: 655, 1
+  size: 216, 318
+  orig: 216, 318
+  offset: 0, 0
+  index: -1

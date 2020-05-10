@@ -1,0 +1,62 @@
+
+small_buttons.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+FigureLRHB
+  rotate: false
+  xy: 2, 220
+  size: 134, 216
+  orig: 216, 318
+  offset: 41, 45
+  index: -1
+FigureLRHW
+  rotate: false
+  xy: 2, 2
+  size: 134, 216
+  orig: 216, 318
+  offset: 41, 45
+  index: -1
+FigureLRNB
+  rotate: false
+  xy: 169, 680
+  size: 159, 204
+  orig: 216, 318
+  offset: 43, 56
+  index: -1
+FigureLRNW
+  rotate: false
+  xy: 2, 438
+  size: 137, 228
+  orig: 222, 342
+  offset: 45, 49
+  index: -1
+FigureLSHB
+  rotate: false
+  xy: 622, 684
+  size: 130, 200
+  orig: 222, 342
+  offset: 44, 64
+  index: -1
+FigureLSHW
+  rotate: false
+  xy: 330, 676
+  size: 149, 208
+  orig: 216, 318
+  offset: 32, 53
+  index: -1
+FigureLSNB
+  rotate: false
+  xy: 481, 683
+  size: 139, 201
+  orig: 216, 318
+  offset: 39, 53
+  index: -1
+FigureLSNW
+  rotate: false
+  xy: 2, 668
+  size: 165, 216
+  orig: 216, 318
+  offset: 30, 43
+  index: -1
