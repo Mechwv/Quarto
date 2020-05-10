@@ -58,7 +58,7 @@ public class MainMenuScreen implements Screen {
         Drawable drawable = new TextureRegionDrawable(myTextureRegion);
         singlePButton = new ImageButton(drawable);
         singlePButton.setDisabled(true);
-        singlePButton.setPosition(( game.screenx /2- singlePButton.getWidth()/2),( game.screeny /2- singlePButton.getHeight()/2-200));
+        singlePButton.setPosition((40),(560));
         singlePButton.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -74,7 +74,7 @@ public class MainMenuScreen implements Screen {
         myTextureRegion = new TextureRegion(myTexture);
         drawable = new TextureRegionDrawable(myTextureRegion);
         MultiPButton = new ImageButton(drawable);
-        MultiPButton.setPosition(( game.screenx /2-MultiPButton.getWidth()/2),( game.screeny /2-MultiPButton.getHeight()/2-MultiPButton.getHeight()-250));
+        MultiPButton.setPosition((160),(250));
         MultiPButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
