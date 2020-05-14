@@ -74,6 +74,7 @@ public class GameManager {
         atlas = game.assets.manager.get(game.assets.figure_pack);
         skin = new Skin(atlas);
 
+
         FigureHRHB = new ImageButton(skin.getDrawable("FigureHRHB"));
         FigureHRHB.setPosition(100,50);
         FigureHRHB.addListener(new ChangeListener() {
@@ -175,7 +176,7 @@ public class GameManager {
             }
         });
         FigureHRNW = new ImageButton(skin.getDrawable("FigureHRNW"));
-        FigureHRNW.setPosition(300,100);
+        FigureHRNW.setPosition(300,50);
         FigureHRNW.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

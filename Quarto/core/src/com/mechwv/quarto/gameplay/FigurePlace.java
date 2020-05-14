@@ -92,7 +92,7 @@ public class FigurePlace {
             return 0;
         }
 
-    private byte getBoardCell(float x, float y){
+    public byte getBoardCell(float x, float y){
         byte a = checkY(y);
         byte b = checkX(x);
         switch (a){
@@ -195,7 +195,7 @@ public class FigurePlace {
                 return v;
             }
             case 3:{
-                v = new Vector2(((x2.x+x2.y)/2-70),((y3.x+y3.y)/2-39));
+                v = new Vector2(((x2.x+x2.y)/2-60),((y3.x+y3.y)/2-39));
                 return v;
             }
             case 4:{
@@ -235,11 +235,11 @@ public class FigurePlace {
                 return v;
             }
             case 13:{
-                v = new Vector2(((x3.x+x3.y)/2-70),((y6.x+y6.y)/2-30));
+                v = new Vector2(((x3.x+x3.y)/2-80),((y6.x+y6.y)/2-30));
                 return v;
             }
             case 14:{
-                v = new Vector2(((x5.x+x5.y)/2-65),((y6.x+y6.y)/2-30));
+                v = new Vector2(((x5.x+x5.y)/2-45),((y6.x+y6.y)/2-30));
                 return v;
             }
             case 15:{
