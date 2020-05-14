@@ -11,6 +11,8 @@ import com.mechwv.quarto.managers.GameManager;
 import com.mechwv.quarto.managers.InputManager;
 import com.mechwv.quarto.screens.MainMenuScreen;
 
+import pl.mk5.gdx.fireapp.GdxFIRApp;
+
 
 public class GameRoot extends Game {
 	public SpriteBatch spriteBatch;

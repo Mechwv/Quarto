@@ -1,117 +1,117 @@
 
 all_buttons.png
-size: 1024,1024
+size: 2048,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 FigureHRHB
   rotate: false
-  xy: 524, 696
-  size: 117, 273
-  orig: 216, 318
-  offset: 50, 33
+  xy: 2, 2
+  size: 120, 297
+  orig: 222, 342
+  offset: 47, 22
   index: -1
 FigureHRHW
   rotate: false
-  xy: 280, 685
+  xy: 169, 2
   size: 124, 284
   orig: 222, 342
   offset: 48, 25
   index: -1
 FigureHRNB
   rotate: false
-  xy: 2, 394
+  xy: 336, 2
   size: 124, 290
   orig: 222, 342
   offset: 47, 22
   index: -1
 FigureHRNW
   rotate: false
-  xy: 128, 424
-  size: 121, 260
-  orig: 216, 318
-  offset: 53, 39
+  xy: 503, 2
+  size: 117, 299
+  orig: 222, 342
+  offset: 52, 25
   index: -1
 FigureHSHB
   rotate: false
-  xy: 144, 696
+  xy: 670, 2
   size: 134, 273
   orig: 222, 342
   offset: 42, 37
   index: -1
 FigureHSHW
   rotate: false
-  xy: 406, 683
-  size: 116, 286
+  xy: 837, 2
+  size: 140, 283
   orig: 222, 342
-  offset: 53, 18
+  offset: 38, 25
   index: -1
 FigureHSNB
   rotate: false
-  xy: 2, 107
-  size: 124, 285
+  xy: 1004, 2
+  size: 140, 276
   orig: 222, 342
-  offset: 44, 23
+  offset: 36, 37
   index: -1
 FigureHSNW
   rotate: false
-  xy: 2, 686
+  xy: 1171, 2
   size: 140, 283
   orig: 222, 342
   offset: 38, 25
   index: -1
 FigureLRHB
   rotate: false
-  xy: 402, 465
+  xy: 1338, 2
   size: 134, 216
   orig: 216, 318
   offset: 41, 45
   index: -1
 FigureLRHW
   rotate: false
-  xy: 538, 478
+  xy: 1505, 2
   size: 134, 216
   orig: 216, 318
   offset: 41, 45
   index: -1
 FigureLRNB
   rotate: false
-  xy: 810, 765
-  size: 159, 204
+  xy: 1672, 2
+  size: 133, 219
   orig: 216, 318
-  offset: 43, 56
+  offset: 41, 45
   index: -1
 FigureLRNW
   rotate: false
-  xy: 128, 194
-  size: 137, 228
-  orig: 222, 342
-  offset: 45, 49
+  xy: 1839, 2
+  size: 134, 216
+  orig: 216, 318
+  offset: 41, 45
   index: -1
 FigureLSHB
   rotate: false
-  xy: 267, 273
+  xy: 2, 303
   size: 130, 200
   orig: 222, 342
   offset: 44, 64
   index: -1
 FigureLSHW
   rotate: false
-  xy: 251, 475
-  size: 149, 208
+  xy: 169, 303
+  size: 165, 216
   orig: 216, 318
-  offset: 32, 53
+  offset: 30, 43
   index: -1
 FigureLSNB
   rotate: false
-  xy: 399, 262
-  size: 139, 201
-  orig: 216, 318
-  offset: 39, 53
+  xy: 336, 303
+  size: 139, 214
+  orig: 222, 342
+  offset: 44, 73
   index: -1
 FigureLSNW
   rotate: false
-  xy: 643, 753
+  xy: 503, 303
   size: 165, 216
   orig: 216, 318
   offset: 30, 43
