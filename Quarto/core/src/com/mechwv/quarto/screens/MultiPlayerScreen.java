@@ -30,6 +30,7 @@ public class MultiPlayerScreen implements Screen{
     private Texture board;
     private Texture turn_texture;
     private Sprite chosen_figure;
+    private float speed;
 
     private ImageButton FigureHRHB;
     private ImageButton FigureHRNB;
@@ -56,6 +57,7 @@ public class MultiPlayerScreen implements Screen{
     private Music gameplayMusic;
 
     private String figure_chosen = "0";
+    private String figure_drawing = "0";
 
     private Board playboard;
 
@@ -67,9 +69,14 @@ public class MultiPlayerScreen implements Screen{
     FigurePlace fp = new FigurePlace();
     WinFinder wf = new WinFinder();
 
+    private float chosen_scale = 0.9f;
     private Vector2 chosen_coords = new Vector2(900,600);
     private Vector2 moving_coords = new Vector2();
+    private Vector2 current_coords = new Vector2();
+    private Vector2 place = new Vector2();
     private double angle;
+
+
 
     public MultiPlayerScreen(final GameRoot game){
         this.game = game;
@@ -174,26 +181,32 @@ public class MultiPlayerScreen implements Screen{
         game.spriteBatch.draw(wooden_field,0,0);
         game.spriteBatch.draw(board,0,800,1100,1100);
         game.spriteBatch.draw(turn_texture,0,720);
+        drawBoard();
         if (!choosing) {
-            if (moving) {
-                if ((chosen_figure.getX() > moving_coords.x) && (chosen_figure.getY() < moving_coords.y)) {
-                    Gdx.app.log("distance", "CoordsX:" + chosen_figure.getX() + "CoordsY:" + chosen_figure.getX());
-                    if (chosen_figure.getX() > moving_coords.x)
-                        chosen_figure.setX(chosen_figure.getX() - 1 * delta);
-                        // ((float) Math.sin(angle * Math.PI / 180) * 0.001f)
-                    if (chosen_figure.getY() < moving_coords.y)
-                        chosen_figure.setY(chosen_figure.getY() +  1 * delta);
-                } else {
-                    moving = false;
-                }
-            }
-            game.spriteBatch.draw(chosen_figure,chosen_figure.getX(),chosen_figure.getY());
+            game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y);
         }
-
+        if (moving) {
+                Gdx.app.log("Moving", "true,  x= " + moving_coords.x + " y= " + moving_coords.y);
+                boolean a = false, b = false;
+                if (current_coords.x > moving_coords.x) {
+                    current_coords.x -= 2500 * delta * Math.abs(Math.cos(angle)) ;
+                }
+                else
+                    a = true;
+                if (current_coords.y < moving_coords.y) {
+                    current_coords.y += 2000 * delta * Math.sin(angle);
+                }
+                else
+                    b = true;
+                Gdx.app.log("Moving", " x=" + current_coords.x + " y=" + current_coords.y);
+                if (a && b) {
+                    moving = false;
+                    fp = new FigurePlace(figure_drawing, playboard, place.x, place.y);
+                }
+            game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y,chosen_figure.getRegionWidth()*chosen_scale,chosen_figure.getRegionHeight()*chosen_scale);
+        }
         game.font.draw(game.spriteBatch, "X =" +  game.screenx, 10, 1800);
         game.font.draw(game.spriteBatch, "Y =" + game.screeny, 10, 1700);
-        //game.font.draw(game.spriteBatch, "Turn = " + game.turn, 10, 1600);
-        drawBoard();
         game.spriteBatch.end();
         stage.draw();
 
@@ -227,14 +240,17 @@ public class MultiPlayerScreen implements Screen{
 
     private void check(){
         figure_chosen = game.gm.getFigureChosen();
-        if (!figure_chosen.equals("0")) choosing = false;
+        if (!figure_chosen.equals("0"))
+            choosing = false;
         if (!choosing) {
             switchturn();
             chosen_figure = game.gm.atlas.createSprite(figure_chosen);
             Gdx.input.setInputProcessor(game.im);
 
-            chosen_figure.setX(chosen_coords.x);
-            chosen_figure.setY(chosen_coords.y);
+            if (!moving) {
+                current_coords.x = chosen_coords.x;
+                current_coords.y = chosen_coords.y;
+            }
 
             if (Gdx.input.isTouched()) {
                 Gdx.app.log("RRRRR", "placing figure");
@@ -242,10 +258,17 @@ public class MultiPlayerScreen implements Screen{
                 game.screeny = game.im.getCoordY();
             }
             if (fp.place_check(playboard,game.screenx,game.screeny)) {
+
+                place.x = game.screenx;
+                place.y = game.screeny;
+                figure_drawing = figure_chosen;
+
                 Gdx.app.log("RRRRR", "place checked");
-                fp = new FigurePlace(figure_chosen, playboard, game.screenx, game.screeny);
-                placed = true;
-                dist_calc(chosen_coords,new Vector2(game.screenx,game.screeny));
+                chosen_scale = check_scale(fp.getBoardCell(game.screenx,game.screeny));
+                current_coords.x = chosen_coords.x;
+                current_coords.y = chosen_coords.y;
+
+                dist_calc(chosen_coords,fp.getCellCoord(fp.getBoardCell(game.screenx,game.screeny)));
                 if(wf.checkBoard(playboard)) {
                     if (game.turn == 4) player_1_won = true;
                     gameplayMusic.stop();
@@ -253,11 +276,8 @@ public class MultiPlayerScreen implements Screen{
                     game.setScreen(new EndingScreen(game,player_1_won));
                     dispose();
                 }
-                game.gm.setFigureChosen("0");
-                checkturn();
                 choosing = true;
-                game.screenx = 0;
-                game.screeny = 0;
+                game.gm.setFigureChosen("0");
             }
         }
         else
@@ -319,6 +339,8 @@ public class MultiPlayerScreen implements Screen{
     }
 
     private void dist_calc(Vector2 a, Vector2 b){
+        b.x+=60;
+        b.y+=30;
         angle = angleBetweenPoints(a,b);
         byte by = fp.getBoardCell(b.x,b.y);
         moving_coords = fp.getCellCoord(by);
@@ -326,7 +348,8 @@ public class MultiPlayerScreen implements Screen{
     }
     private double angleBetweenPoints(Vector2 a, Vector2 b)
     {
-        Gdx.app.log("Angle", "= " + (180 - (Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI)));
-        return  (180 - (Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI));
+        Vector2 ab = new Vector2(b.x-a.x,b.y-a.y);
+        Vector2 ac = new Vector2(a.x+Math.abs(ab.x),a.y);
+        return (Math.PI - Math.acos((ab.x*ac.x+ab.y+ac.y)/(ab.len()*ac.len())));
     }
 }
