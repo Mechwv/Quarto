@@ -22,6 +22,7 @@ public class AssetsLoader {
     public final String  white = "images/Circle_W.png";
     public final String  gameplayMusic = "sounds/GameplayMusic.wav";
     public final String  menuMusic = "sounds/MenuMusic.wav";
+    public final String  TEST = "images/test.jpg";
 
     public final String player_1_choosing = "images/turns&ending/player_1_choosing.png";
     public final String player_2_choosing = "images/turns&ending/player_2_choosing.png";
@@ -55,6 +56,8 @@ public class AssetsLoader {
         manager.load(SFXclick, Music.class);
         manager.load(gameplayMusic, Music.class);
         manager.load(menuMusic, Music.class);
+
+        manager.load(TEST, Texture.class);
     }
 
     public void dispose(){

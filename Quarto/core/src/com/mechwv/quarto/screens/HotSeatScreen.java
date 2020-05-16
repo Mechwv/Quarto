@@ -19,7 +19,7 @@ import com.mechwv.quarto.gameplay.WinFinder;
 import com.mechwv.quarto.managers.InputManager;
 import com.mechwv.quarto.objects.Board;
 
-public class MultiPlayerScreen implements Screen{
+public class HotSeatScreen implements Screen{
     private GameRoot game;
     private final Stage stage;
 
@@ -30,7 +30,6 @@ public class MultiPlayerScreen implements Screen{
     private Texture board;
     private Texture turn_texture;
     private Sprite chosen_figure;
-    private float speed;
 
     private ImageButton FigureHRHB;
     private ImageButton FigureHRNB;
@@ -62,7 +61,6 @@ public class MultiPlayerScreen implements Screen{
     private Board playboard;
 
     private boolean choosing = true;
-    private boolean placed = false;
     private boolean moving = false;
     private boolean player_1_won = false;
 
@@ -78,7 +76,7 @@ public class MultiPlayerScreen implements Screen{
 
 
 
-    public MultiPlayerScreen(final GameRoot game){
+    public HotSeatScreen(final GameRoot game){
         this.game = game;
         camera = new OrthographicCamera();
         viewport = new StretchViewport(game.virtual_screen_width,game.virtual_screen_height);
@@ -202,6 +200,13 @@ public class MultiPlayerScreen implements Screen{
                 if (a && b) {
                     moving = false;
                     fp = new FigurePlace(figure_drawing, playboard, place.x, place.y);
+                    if(wf.checkBoard(playboard)) {
+                        if (game.turn == 4) player_1_won = true;
+                        gameplayMusic.stop();
+                        gameplayMusic.setLooping(false);
+                        game.setScreen(new EndingScreen(game,player_1_won));
+                        dispose();
+                    }
                 }
             game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y,chosen_figure.getRegionWidth()*chosen_scale,chosen_figure.getRegionHeight()*chosen_scale);
         }
@@ -269,13 +274,6 @@ public class MultiPlayerScreen implements Screen{
                 current_coords.y = chosen_coords.y;
 
                 dist_calc(chosen_coords,fp.getCellCoord(fp.getBoardCell(game.screenx,game.screeny)));
-                if(wf.checkBoard(playboard)) {
-                    if (game.turn == 4) player_1_won = true;
-                    gameplayMusic.stop();
-                    gameplayMusic.setLooping(false);
-                    game.setScreen(new EndingScreen(game,player_1_won));
-                    dispose();
-                }
                 choosing = true;
                 game.gm.setFigureChosen("0");
             }

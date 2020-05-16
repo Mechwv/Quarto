@@ -27,14 +27,14 @@ public class MainMenuScreen implements Screen {
     private OrthographicCamera camera;
     private Viewport viewport;
     private final Button singlePButton;
-    private final ImageButton MultiPButton;
+    private final ImageButton multiPButton;
 
     //Parameter for Sound
     private Texture myTexture;
     private TextureRegion myTextureRegion;
     private Texture background;
     private Music SFXClick;
-    private Music menuMusic;
+
 
     public MainMenuScreen(final GameRoot game){
 
@@ -49,46 +49,41 @@ public class MainMenuScreen implements Screen {
         stage = new Stage(viewport,game.spriteBatch);
 
         Gdx.input.setInputProcessor(stage);
-
-        menuMusic = game.assets.manager.get(game.assets.menuMusic);
-        menuMusic.play();
-        menuMusic.setLooping(true);
         myTexture = game.assets.manager.get(game.assets.singleplayer);
         myTextureRegion = new TextureRegion(myTexture);
         Drawable drawable = new TextureRegionDrawable(myTextureRegion);
         singlePButton = new ImageButton(drawable);
-        singlePButton.setDisabled(true);
         singlePButton.setPosition((40),(560));
         singlePButton.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.log("RRRRR", "click");
                 SFXClick.play();
-                menuMusic.stop();
-                menuMusic.setLooping(false);
-                //game.setScreen(new SinglePlayerScreen(game));
+//                menuMusic.stop();
+//                menuMusic.setLooping(false);
+                game.setScreen(new Lobby(game));
                 dispose();
             }
         });
         myTexture = game.assets.manager.get(game.assets.multiplayer);
         myTextureRegion = new TextureRegion(myTexture);
         drawable = new TextureRegionDrawable(myTextureRegion);
-        MultiPButton = new ImageButton(drawable);
-        MultiPButton.setPosition((160),(250));
-        MultiPButton.addListener(new ChangeListener() {
+        multiPButton = new ImageButton(drawable);
+        multiPButton.setPosition((160),(250));
+        multiPButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 SFXClick.play();
                 Gdx.app.log("RRRRR", "click1");
-                menuMusic.stop();
-                menuMusic.setLooping(false);
-                game.setScreen(new MultiPlayerScreen(game));
+//                menuMusic.stop();
+//                menuMusic.setLooping(false);
+                game.setScreen(new HotSeatScreen(game));
                 dispose();
             }
          });
         background = game.assets.manager.get(game.assets.Bgr);
         stage.addActor(singlePButton);
-        stage.addActor(MultiPButton);
+        stage.addActor(multiPButton);
 
         SFXClick = game.assets.manager.get(game.assets.SFXclick);
     }
