@@ -1,5 +1,6 @@
 package com.mechwv.quarto.gameplay;
 
+import com.badlogic.gdx.Gdx;
 import com.mechwv.quarto.objects.Board;
 
 public class WinFinder {
@@ -48,12 +49,15 @@ public class WinFinder {
                 }
         }
         int k = 0;
-        int i = 0;
+        int i;
         for (i = 0; i < 16; i++){
             if (!board.board[i].equals("-"))
                 k++;
         }
-        if (i == k) return 2;
+        if (i == k) {
+            Gdx.app.log("win", " is" + 2);
+            return 2;
+        }
         return 0;
     }
 }

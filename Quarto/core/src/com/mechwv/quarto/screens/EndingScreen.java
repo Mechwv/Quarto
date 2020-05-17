@@ -20,9 +20,10 @@ public class EndingScreen implements Screen {
     private final Stage stage;
     private OrthographicCamera camera;
     private Viewport viewport;
+    private int winner;
 
-
-    public EndingScreen(final GameRoot game, boolean player_1_won){
+    public EndingScreen(final GameRoot game, int winner){
+        this.winner = winner;
         game.screenx = Gdx.graphics.getWidth();
         game.screeny = Gdx.graphics.getHeight();
         camera = new OrthographicCamera();
@@ -33,12 +34,14 @@ public class EndingScreen implements Screen {
         this.game = game;
         retry = game.gm.getRetry();
         board = game.gm.getEnd_board();
-        if (player_1_won)
+        if (winner == 1)
             winning = game.gm.getPlayer_1_won();
-        else winning = game.gm.getPlayer_2_won();
+        if (winner == 2)
+            winning = game.gm.getPlayer_2_won();
+        if (winner == 3)
+            winning = game.gm.getDraw();
 
             stage.addActor(retry);
-
     }
 
     @Override
@@ -53,7 +56,10 @@ public class EndingScreen implements Screen {
         game.spriteBatch.setProjectionMatrix(camera.combined);
         game.spriteBatch.begin();
         game.spriteBatch.draw(board,0,0);
-        game.spriteBatch.draw(winning,200,game.virtual_screen_height/2+300);
+        if (winner != 3)
+            game.spriteBatch.draw(winning,200,game.virtual_screen_height/2+300);
+        else
+            game.spriteBatch.draw(winning,40,game.virtual_screen_height/2+300);
         game.spriteBatch.end();
         stage.draw();
     }

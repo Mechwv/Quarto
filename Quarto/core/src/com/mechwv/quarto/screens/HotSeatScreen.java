@@ -61,7 +61,6 @@ public class HotSeatScreen implements Screen{
 
     private boolean choosing = true;
     private boolean moving = false;
-    private boolean player_1_won = false;
 
     FigurePlace fp = new FigurePlace();
     WinFinder wf = new WinFinder();
@@ -200,10 +199,21 @@ public class HotSeatScreen implements Screen{
                     moving = false;
                     fp = new FigurePlace(figure_drawing, playboard, place.x, place.y);
                     if(wf.checkBoard(playboard) == 1) {
-                        if (game.turn == 1) player_1_won = true;
-                        gameplayMusic.stop();
-                        gameplayMusic.setLooping(false);
-                        game.setScreen(new EndingScreen(game,player_1_won));
+                        if (game.turn == 1) {
+                            Gdx.app.log("win","winner"+1);
+                            gameplayMusic.stop();
+                            gameplayMusic.setLooping(false);
+                            game.setScreen(new EndingScreen(game,1));
+                            dispose();
+                        } else if (game.turn == 2) {
+                            Gdx.app.log("win","winner"+2);
+                            gameplayMusic.stop();
+                            gameplayMusic.setLooping(false);
+                            game.setScreen(new EndingScreen(game, 2));
+                            dispose();
+                        }
+                    } else if (wf.checkBoard(playboard) == 2){
+                        game.setScreen(new EndingScreen(game,3));
                         dispose();
                     }
                 }
@@ -250,7 +260,33 @@ public class HotSeatScreen implements Screen{
         if (!choosing) {
             switchturn();
             chosen_figure = game.gm.atlas.createSprite(figure_chosen);
+            Gdx.input.setInputProcessor(game.im);
 
+            if (!moving) {
+                current_coords.x = chosen_coords.x;
+                current_coords.y = chosen_coords.y;
+            }
+
+            if (Gdx.input.isTouched()) {
+                Gdx.app.log("RRRRR", "placing figure");
+                game.screenx = game.im.getCoordX();
+                game.screeny = game.im.getCoordY();
+            }
+            if (fp.place_check(playboard,game.screenx,game.screeny)) {
+                checkturn();
+                place.x = game.screenx;
+                place.y = game.screeny;
+                figure_drawing = figure_chosen;
+
+                Gdx.app.log("RRRRR", "place checked");
+                chosen_scale = check_scale(fp.getBoardCell(game.screenx,game.screeny));
+                current_coords.x = chosen_coords.x;
+                current_coords.y = chosen_coords.y;
+
+                dist_calc(chosen_coords,fp.getCellCoord(fp.getBoardCell(game.screenx,game.screeny)));
+                choosing = true;
+                game.gm.setFigureChosen("0");
+            }
         }
         else
         {

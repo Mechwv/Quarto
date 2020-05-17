@@ -526,4 +526,8 @@ public class GameManager {
         return you_win;
     }
 
+    public Texture getDraw() {
+        return draw;
+    }
+
 }
