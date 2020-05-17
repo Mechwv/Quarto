@@ -212,6 +212,7 @@ public class HotSeatScreen implements Screen{
         }
         game.font.draw(game.spriteBatch, "X =" +  game.screenx, 10, 1800);
         game.font.draw(game.spriteBatch, "Y =" + game.screeny, 10, 1700);
+        game.font.draw(game.spriteBatch, "Turn =" + game.turn, 10, 1600);
         game.spriteBatch.end();
         stage.draw();
 
@@ -263,7 +264,7 @@ public class HotSeatScreen implements Screen{
                 game.screeny = game.im.getCoordY();
             }
             if (fp.place_check(playboard,game.screenx,game.screeny)) {
-
+                checkturn();
                 place.x = game.screenx;
                 place.y = game.screeny;
                 figure_drawing = figure_chosen;
