@@ -1,0 +1,50 @@
+var PORT = process.env.PORT || 8080;
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server, {forceNew: true });
+var waitingPlayer;
+var playroom;
+
+server.listen(PORT, function(){
+	console.log("Server is running");
+});
+
+io.on('connection', function(socket) {
+	socket.emit('socketID', { id: socket.id });
+	if (waitingPlayer){
+	     socket.join(playroom);
+         socket.emit('matchStart', { status: true, player: 2, room: playroom});
+         waitingPlayer.emit('matchStart', { status: true, player: 1, room: playroom});
+         waitingPlayer = null;
+         playroom = null;
+    } else {
+         socket.on('create', function(room) {
+            playroom = room;
+            socket.join(room);
+            waitingPlayer = socket;
+            socket.emit('matchStart', { status: false, room: playroom});
+          });
+    }
+	socket.on('disconnect', function() {
+       		 waitingPlayer = null;
+       		 socket.disconnect();
+    });
+    socket.on('update', function(list, room , figure_chosen) {
+        console.log("Array " + list);
+        console.log("Room " + room);
+        console.log("Figure " + figure_chosen);
+       socket.to(room).emit('update', {
+              list: list,
+              room: room,
+              figure: figure_chosen
+      })
+    });
+
+    socket.on('turnUpdate', function(room, turn) {
+        console.log("room " + room + " turn " + turn);
+        socket.to(room).emit('turnUpdate', {
+              turn: turn
+        })
+    });
+});
+

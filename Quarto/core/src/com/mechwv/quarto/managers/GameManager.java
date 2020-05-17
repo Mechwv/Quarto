@@ -59,6 +59,13 @@ public class GameManager {
     private Texture player_1_won;
     private Texture player_2_won;
 
+    private Texture hotseat;
+    private Texture play_again;
+    private Texture return_back;
+    private Texture you_lose;
+    private Texture you_win;
+    private Texture draw;
+
     public GameManager(final GameRoot game){
         this.game = game;
         setupButtons();
@@ -253,7 +260,7 @@ public class GameManager {
             }
         });
 
-        Texture texture = game.assets.manager.get(game.assets.retry);
+        Texture texture = game.assets.manager.get(game.assets.play_again);
         TextureRegion textureRegion = new TextureRegion(texture);
         Drawable drawable = new TextureRegionDrawable(textureRegion);
         retry = new ImageButton(drawable);
@@ -359,6 +366,13 @@ public class GameManager {
         end_board = game.assets.manager.get(game.assets.end_board);
         player_1_won = game.assets.manager.get(game.assets.player_1_won);
         player_2_won = game.assets.manager.get(game.assets.player_2_won);
+        hotseat = game.assets.manager.get(game.assets.hotseat);
+        play_again = game.assets.manager.get(game.assets.play_again);
+        return_back = game.assets.manager.get(game.assets.return_back);
+        you_lose = game.assets.manager.get(game.assets.you_lose);
+        you_win = game.assets.manager.get(game.assets.you_win);
+        draw = game.assets.manager.get(game.assets.draw);
+
     }
 
 
@@ -490,6 +504,26 @@ public class GameManager {
 
     public Texture getPlayer_2_won() {
         return player_2_won;
+    }
+
+    public Texture getHotseat() {
+        return hotseat;
+    }
+
+    public Texture getPlay_again() {
+        return play_again;
+    }
+
+    public Texture getReturn_back() {
+        return return_back;
+    }
+
+    public Texture getYou_lose() {
+        return you_lose;
+    }
+
+    public Texture getYou_win() {
+        return you_win;
     }
 
 }

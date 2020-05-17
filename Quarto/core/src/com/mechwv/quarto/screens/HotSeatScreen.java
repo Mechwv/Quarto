@@ -2,7 +2,6 @@ package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -200,8 +199,8 @@ public class HotSeatScreen implements Screen{
                 if (a && b) {
                     moving = false;
                     fp = new FigurePlace(figure_drawing, playboard, place.x, place.y);
-                    if(wf.checkBoard(playboard)) {
-                        if (game.turn == 4) player_1_won = true;
+                    if(wf.checkBoard(playboard) == 1) {
+                        if (game.turn == 1) player_1_won = true;
                         gameplayMusic.stop();
                         gameplayMusic.setLooping(false);
                         game.setScreen(new EndingScreen(game,player_1_won));
@@ -251,33 +250,7 @@ public class HotSeatScreen implements Screen{
         if (!choosing) {
             switchturn();
             chosen_figure = game.gm.atlas.createSprite(figure_chosen);
-            Gdx.input.setInputProcessor(game.im);
 
-            if (!moving) {
-                current_coords.x = chosen_coords.x;
-                current_coords.y = chosen_coords.y;
-            }
-
-            if (Gdx.input.isTouched()) {
-                Gdx.app.log("RRRRR", "placing figure");
-                game.screenx = game.im.getCoordX();
-                game.screeny = game.im.getCoordY();
-            }
-            if (fp.place_check(playboard,game.screenx,game.screeny)) {
-                checkturn();
-                place.x = game.screenx;
-                place.y = game.screeny;
-                figure_drawing = figure_chosen;
-
-                Gdx.app.log("RRRRR", "place checked");
-                chosen_scale = check_scale(fp.getBoardCell(game.screenx,game.screeny));
-                current_coords.x = chosen_coords.x;
-                current_coords.y = chosen_coords.y;
-
-                dist_calc(chosen_coords,fp.getCellCoord(fp.getBoardCell(game.screenx,game.screeny)));
-                choosing = true;
-                game.gm.setFigureChosen("0");
-            }
         }
         else
         {

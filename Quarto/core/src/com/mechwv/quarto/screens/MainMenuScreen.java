@@ -49,11 +49,11 @@ public class MainMenuScreen implements Screen {
         stage = new Stage(viewport,game.spriteBatch);
 
         Gdx.input.setInputProcessor(stage);
-        myTexture = game.assets.manager.get(game.assets.singleplayer);
+        myTexture = game.assets.manager.get(game.assets.multiplayer);
         myTextureRegion = new TextureRegion(myTexture);
         Drawable drawable = new TextureRegionDrawable(myTextureRegion);
         singlePButton = new ImageButton(drawable);
-        singlePButton.setPosition((40),(560));
+        singlePButton.setPosition((160),(250));
         singlePButton.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -65,11 +65,11 @@ public class MainMenuScreen implements Screen {
                 dispose();
             }
         });
-        myTexture = game.assets.manager.get(game.assets.multiplayer);
+        myTexture = game.assets.manager.get(game.assets.hotseat);
         myTextureRegion = new TextureRegion(myTexture);
         drawable = new TextureRegionDrawable(myTextureRegion);
         multiPButton = new ImageButton(drawable);
-        multiPButton.setPosition((160),(250));
+        multiPButton.setPosition((40),(560));
         multiPButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

@@ -6,19 +6,10 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mechwv.quarto.GameRoot;
-import com.mechwv.quarto.objects.Board;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,11 +26,13 @@ public class Lobby implements Screen {
     private Viewport viewport;
 
     private Texture wooden_field;
-    private Music gameplayMusic;
     private Music waitingMusic;
 
     private boolean match_status;
     private io.socket.client.Socket socket;
+    private String room;
+
+    private int player=0;
 
     public Lobby(final GameRoot game){
         this.game = game;
@@ -68,7 +61,7 @@ public class Lobby implements Screen {
         if (!match_status)
             game.font.draw(game.spriteBatch, "Waiting for player 2", 300, 1000);
         else {
-            game.setScreen(new MultiplayerScreen(game, socket));
+            game.setScreen(new MultiplayerScreen(game, socket, player, room));
             dispose();
         }
         game.spriteBatch.end();
@@ -76,7 +69,7 @@ public class Lobby implements Screen {
     }
 
 
-    public void connectSocket(){
+    private void connectSocket(){
         try{
             Gdx.app.log("SocketIO"," trying to connect");
             socket = IO.socket("https://js-quarto-server.herokuapp.com/");
@@ -88,7 +81,7 @@ public class Lobby implements Screen {
 
 
 
-    public void configSocketEvents() {
+    private void configSocketEvents() {
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -102,6 +95,8 @@ public class Lobby implements Screen {
                 try {
                     String id = data.getString("id");
                     Gdx.app.log("SocketIO", "MyId: " + id);
+                    id += (int) (Math.random()*1000);
+                    socket.emit("create", id);
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting ID");
                 }
@@ -113,9 +108,13 @@ public class Lobby implements Screen {
                 Gdx.app.log("SocketIO", "match system functioning");
                 try {
                     match_status = data.getBoolean("status");
+                    room = data.getString("room");
+                    if (match_status) player = data.getInt("player");
                     Gdx.app.log("SocketIO", "Current Match Status: " + match_status);
+                    Gdx.app.log("SocketIO", "Current Match Room: " + room);
+                    Gdx.app.log("SocketIO", "You are player: " + player);
                 } catch (JSONException e) {
-                    Gdx.app.log("SocketIO", "Error getting New Player Connected");
+                    Gdx.app.log("SocketIO", "Room hasn`t been created yet");
                 }
             }
         });

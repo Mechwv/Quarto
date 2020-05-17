@@ -22,7 +22,13 @@ public class AssetsLoader {
     public final String  white = "images/Circle_W.png";
     public final String  gameplayMusic = "sounds/GameplayMusic.wav";
     public final String  menuMusic = "sounds/MenuMusic.wav";
-    public final String  TEST = "images/test.jpg";
+
+    public final String hotseat = "images/Hotseat.png";
+    public final String play_again = "images/play_again.png";
+    public final String return_back = "images/return.png";
+    public final String you_lose = "images/turns&ending/you lose2.png";
+    public final String you_win = "images/turns&ending/you win2.png";
+    public final String draw = "images/turns&ending/draw.png";
 
     public final String player_1_choosing = "images/turns&ending/player_1_choosing.png";
     public final String player_2_choosing = "images/turns&ending/player_2_choosing.png";
@@ -30,6 +36,7 @@ public class AssetsLoader {
     public final String player_2_placing = "images/turns&ending/player_2_placing.png";
     public final String player_1_won = "images/turns&ending/player_1_won.png";
     public final String player_2_won = "images/turns&ending/player_2_won.png";
+
 
     public final String  SFXclick = "sounds/wooden-click.wav";
 
@@ -57,7 +64,13 @@ public class AssetsLoader {
         manager.load(gameplayMusic, Music.class);
         manager.load(menuMusic, Music.class);
 
-        manager.load(TEST, Texture.class);
+        manager.load(hotseat, Texture.class);
+        manager.load(return_back, Texture.class);
+        manager.load(play_again, Texture.class);
+        manager.load(you_lose, Texture.class);
+        manager.load(you_win, Texture.class);
+        manager.load(draw, Texture.class);
+
     }
 
     public void dispose(){
