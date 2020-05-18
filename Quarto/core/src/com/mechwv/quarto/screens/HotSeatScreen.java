@@ -218,7 +218,6 @@ public class HotSeatScreen implements Screen{
                 }
             game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y,chosen_figure.getRegionWidth()*chosen_scale,chosen_figure.getRegionHeight()*chosen_scale);
         }
-        game.font.draw(game.spriteBatch, "Turn =" + game.turn, 10, 1680);
         game.spriteBatch.end();
         stage.draw();
 

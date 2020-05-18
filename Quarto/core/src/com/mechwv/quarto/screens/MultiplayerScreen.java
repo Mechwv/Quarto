@@ -71,6 +71,10 @@ public class MultiplayerScreen implements Screen {
     private ImageButton white;
     private ImageButton sound;
     private ImageButton rules;
+    private ImageButton musicPlay;
+    private ImageButton musicNoplay;
+    private ImageButton svitok;
+
     private Music SFXClick;
 
     private String figure_chosen = "0";
@@ -144,6 +148,12 @@ public class MultiplayerScreen implements Screen {
         board = game.gm.getBoard();
         SFXClick = game.gm.getSFXClick();
         turn_texture = game.gm.getPlayer_1_choosing();
+
+        musicPlay = game.gm.getMusicPlay();
+        musicNoplay = game.gm.getMusic_noplay();
+        svitok = game.gm.getSvitok();
+        rules = game.gm.getRules();
+
 
         FigureHRHB = game.gm.getFigureHRHB();
         FigureHRNB = game.gm.getFigureHRNB();
@@ -220,6 +230,11 @@ public class MultiplayerScreen implements Screen {
         stage.addActor(black);
         stage.addActor(white);
 
+        stage.addActor(musicPlay);
+        stage.addActor(musicNoplay);
+        stage.addActor(svitok);
+        stage.addActor(rules);
+
     }
 
     private void boardInit(){
@@ -247,10 +262,7 @@ public class MultiplayerScreen implements Screen {
         game.spriteBatch.draw(turn_texture,0,720);
         drawBoard();
         draw_chosen(delta);
-        game.font.draw(game.spriteBatch, "X =" +  game.screenx, 10, 1800);
-        game.font.draw(game.spriteBatch, "Y =" + game.screeny, 10, 1700);
-        game.font.draw(game.spriteBatch, "Turn =" + game.turn, 10, 1600);
-        game.font.draw(game.spriteBatch, "You are Player" + player, 300, 1840);
+        game.font.draw(game.spriteBatch, "Player " + player, 400, 1840);
         game.spriteBatch.end();
         stage.draw();
 

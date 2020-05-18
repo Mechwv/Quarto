@@ -38,7 +38,7 @@ public class GameRoot extends Game {
         FileHandle fontFile = Gdx.files.internal("fonts/russoone.ttf");
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 50;
+        parameter.size = 80;
         font = generator.generateFont(parameter);
 		this.setScreen(new MainMenuScreen(this));
 	}
