@@ -3,11 +3,17 @@ package com.mechwv.quarto.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mechwv.quarto.GameRoot;
@@ -21,6 +27,7 @@ public class MultiplayerEndingScreen implements Screen {
     private final Stage stage;
     private OrthographicCamera camera;
     private Viewport viewport;
+    private Music SFXclick;
 
 
     public MultiplayerEndingScreen(final GameRoot game, int winner, int player){
@@ -32,7 +39,21 @@ public class MultiplayerEndingScreen implements Screen {
         stage = new Stage(viewport,game.spriteBatch);
         Gdx.input.setInputProcessor(stage);
         this.game = game;
-        retry = game.gm.getRetry();
+
+        SFXclick = game.gm.getSFXClick();
+        Texture texture = game.assets.manager.get(game.assets.play_again);
+        TextureRegion textureRegion = new TextureRegion(texture);
+        Drawable drawable = new TextureRegionDrawable(textureRegion);
+        retry = new ImageButton(drawable);
+        retry.setPosition(( game.virtual_screen_width/2- retry.getWidth()/2),( game.virtual_screen_width/2+200));
+        retry.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                SFXclick.play();
+                game.gm.update();
+                game.setScreen(new MainMenuScreen(game,false));
+            }
+        });
         board = game.gm.getEnd_board();
         if (winner == 3)  {winning = game.gm.getDraw();}
         else {
@@ -64,6 +85,7 @@ public class MultiplayerEndingScreen implements Screen {
 
     private void backTo() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            game.gm.update();
             game.setScreen(new MainMenuScreen(game, true));
             dispose();
         }

@@ -255,7 +255,7 @@ public class MultiplayerScreen implements Screen {
         game.spriteBatch.begin();
         game.spriteBatch.draw(wooden_field,0,0);
         game.spriteBatch.draw(board,0,800,1100,1100);
-        game.spriteBatch.draw(turn_texture,0,720);
+        game.spriteBatch.draw(turn_texture,-70,720);
         drawBoard();
         draw_chosen(delta);
         game.font.draw(game.spriteBatch, "Player " + player, 400, 1840);
@@ -385,7 +385,9 @@ public class MultiplayerScreen implements Screen {
                     if (game.turn == 1) {
                         socket.emit("gameEnd",room, 1);
                     }
-                    else socket.emit("gameEnd",room, 2);
+                    else {
+                        socket.emit("gameEnd",room, 2);
+                    }
                     game.music.stop();
                     game.music.setLooping(false);
                 } else if (wf.checkBoard(playboard) == 2){
@@ -394,6 +396,14 @@ public class MultiplayerScreen implements Screen {
             }
             game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y,chosen_figure.getRegionWidth()*chosen_scale,chosen_figure.getRegionHeight()*chosen_scale);
         }
+    }
+
+    private void gameEnd(int winner){
+        Gdx.app.log("SocketIO", "winner is " + winner + " player is "+ player);
+        game.music.stop();
+        socket.emit("disconnect");
+        game.setScreen(new MultiplayerEndingScreen(game, winner, player));
+        dispose();
     }
 
     private void getInfoEvents(){
@@ -423,6 +433,10 @@ public class MultiplayerScreen implements Screen {
                     a = a.replace("]","");
                     a = a.replaceAll("[,.]", "");
                     playboard.board = a.split("\\s");
+                    svitok.setDisabled(true);
+                    svitok.setVisible(false);
+                    rules.setVisible(true);
+                    rules.setDisabled(false);
                     Gdx.app.log("SocketIO", "Array = " + Arrays.toString(playboard.board));
 
                 } catch (JSONException | DecoderException | IOException | ClassNotFoundException e) {
@@ -436,11 +450,8 @@ public class MultiplayerScreen implements Screen {
                 Gdx.app.log("SocketIO", "Got info");
                 try {
                     int winner = data.getInt("winner");
-                    Gdx.app.log("SocketIO", "winner is " + winner + " player is "+ player);
-                    game.music.stop();
-                    game.setScreen(new MultiplayerEndingScreen(game, winner, player));
-                    socket.emit("disconnect");
-                    dispose();
+                    gameEnd(winner);
+
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting info");
                 }
@@ -450,6 +461,7 @@ public class MultiplayerScreen implements Screen {
 
     private void backTo() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            game.gm.update();
             Gdx.app.log("SocketIO", " disconnecting...");
             socket.emit("disconnect");
             if (player == 1) {

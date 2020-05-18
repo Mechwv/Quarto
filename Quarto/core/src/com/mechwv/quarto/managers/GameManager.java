@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mechwv.quarto.GameRoot;
-import com.mechwv.quarto.screens.MainMenuScreen;
 
 
 public class GameManager {
@@ -82,6 +81,7 @@ public class GameManager {
     public void update(){
         setupButtons();
         setupMisc();
+        setFigureChosen("0");
     }
 
     private void setupButtons(){
@@ -267,25 +267,9 @@ public class GameManager {
             }
         });
 
-        Texture texture = game.assets.manager.get(game.assets.play_again);
+        Texture texture = game.assets.manager.get(game.assets.sound_on);
         TextureRegion textureRegion = new TextureRegion(texture);
         Drawable drawable = new TextureRegionDrawable(textureRegion);
-        retry = new ImageButton(drawable);
-        retry.setPosition(( game.virtual_screen_width/2- retry.getWidth()/2),( game.virtual_screen_width/2+200));
-        retry.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                SFXClick.play();
-                retry.remove();
-                game.setScreen(new MainMenuScreen(game,false));
-                update();
-            }
-        });
-
-
-        texture = game.assets.manager.get(game.assets.sound_on);
-        textureRegion = new TextureRegion(texture);
-        drawable = new TextureRegionDrawable(textureRegion);
         musicPlay = new ImageButton(drawable);
         musicPlay.setPosition(10,1700);
         musicPlay.addListener(new ChangeListener() {

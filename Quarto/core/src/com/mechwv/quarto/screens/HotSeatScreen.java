@@ -227,6 +227,7 @@ public class HotSeatScreen implements Screen{
 
     private void backTo() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            game.gm.update();
             Gdx.app.log("SocketIO", " disconnecting...");
             game.music.stop();
             game.setScreen(new MainMenuScreen(game, true));
