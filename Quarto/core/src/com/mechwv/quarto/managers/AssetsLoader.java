@@ -23,6 +23,12 @@ public class AssetsLoader {
     public final String  gameplayMusic = "sounds/GameplayMusic.wav";
     public final String  menuMusic = "sounds/MenuMusic.wav";
 
+    public final String  scroll = "images/buttons/knopkasvitka.png";
+    public final String  rules = "images/buttons/rules3.png";
+    public final String  sound_off = "images/buttons/sound_off.png";
+    public final String  sound_on = "images/buttons/sound_on.png";
+
+
     public final String hotseat = "images/Hotseat.png";
     public final String play_again = "images/play_again.png";
     public final String return_back = "images/return.png";
@@ -70,6 +76,11 @@ public class AssetsLoader {
         manager.load(you_lose, Texture.class);
         manager.load(you_win, Texture.class);
         manager.load(draw, Texture.class);
+
+        manager.load(scroll, Texture.class);
+        manager.load(rules, Texture.class);
+        manager.load(sound_on, Texture.class);
+        manager.load(sound_off, Texture.class);
 
     }
 

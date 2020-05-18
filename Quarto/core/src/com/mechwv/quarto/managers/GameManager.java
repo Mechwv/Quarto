@@ -36,10 +36,16 @@ public class GameManager {
     private ImageButton black;
     private ImageButton white;
     private ImageButton retry;
+    private ImageButton musicPlay;
+    private ImageButton music_noplay;
+    private ImageButton rules;
+    private ImageButton svitok;
 
     private Texture wooden_field;
     private Texture board;
     private Texture end_board;
+    private Texture music_on;
+    private Texture music_off;
 
     private Music SFXClick;
     private Music menuMusic;
@@ -65,6 +71,7 @@ public class GameManager {
     private Texture you_lose;
     private Texture you_win;
     private Texture draw;
+
 
     public GameManager(final GameRoot game){
         this.game = game;
@@ -276,6 +283,73 @@ public class GameManager {
         });
 
 
+        texture = game.assets.manager.get(game.assets.sound_on);
+        textureRegion = new TextureRegion(texture);
+        drawable = new TextureRegionDrawable(textureRegion);
+        musicPlay = new ImageButton(drawable);
+        musicPlay.setPosition(10,1700);
+        musicPlay.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.music.setVolume(0.0f);
+                musicPlay.setDisabled(true);
+                musicPlay.setVisible(false);
+                music_noplay.setVisible(true);
+                music_noplay.setDisabled(false);
+                }
+        });
+
+        texture = game.assets.manager.get(game.assets.sound_off);
+        textureRegion = new TextureRegion(texture);
+        drawable = new TextureRegionDrawable(textureRegion);
+        music_noplay = new ImageButton(drawable);
+        music_noplay.setDisabled(true);
+        music_noplay.setVisible(false);
+        music_noplay.setPosition(10,1700);
+        music_noplay.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.music.setVolume(0.5f);
+                musicPlay.setDisabled(false);
+                musicPlay.setVisible(true);
+                music_noplay.setVisible(false);
+                music_noplay.setDisabled(true);
+            }
+        });
+
+
+
+        texture = game.assets.manager.get(game.assets.scroll);
+        textureRegion = new TextureRegion(texture);
+        drawable = new TextureRegionDrawable(textureRegion);
+        rules = new ImageButton(drawable);
+        rules.setPosition(840,1700);
+        rules.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                svitok.setVisible(true);
+                svitok.setDisabled(false);
+                rules.setVisible(false);
+            }
+        });
+
+        texture = game.assets.manager.get(game.assets.rules);
+        textureRegion = new TextureRegion(texture);
+        drawable = new TextureRegionDrawable(textureRegion);
+        svitok = new ImageButton(drawable);
+        svitok.setVisible(false);
+        svitok.setDisabled(true);
+        svitok.setPosition(0,0);
+        svitok.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                svitok.setVisible(false);
+                svitok.setDisabled(true);
+                rules.setVisible(true);
+            }
+        });
+
+
         texture = game.assets.manager.get(game.assets.black);
         textureRegion = new TextureRegion(texture);
         drawable = new TextureRegionDrawable(textureRegion);
@@ -372,7 +446,8 @@ public class GameManager {
         you_lose = game.assets.manager.get(game.assets.you_lose);
         you_win = game.assets.manager.get(game.assets.you_win);
         draw = game.assets.manager.get(game.assets.draw);
-
+        music_on = game.assets.manager.get(game.assets.sound_on);
+        music_off = game.assets.manager.get(game.assets.sound_off);
     }
 
 
@@ -528,6 +603,23 @@ public class GameManager {
 
     public Texture getDraw() {
         return draw;
+    }
+
+    public ImageButton getRules() {
+        return rules;
+    }
+
+    public ImageButton getMusicPlay() {
+        return musicPlay;
+    }
+
+    public ImageButton getSvitok() {
+        return svitok;
+    }
+
+
+    public ImageButton getMusic_noplay() {
+        return music_noplay;
     }
 
 }

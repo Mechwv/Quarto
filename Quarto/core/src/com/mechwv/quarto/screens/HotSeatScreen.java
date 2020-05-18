@@ -48,11 +48,13 @@ public class HotSeatScreen implements Screen{
     private ImageButton FigureLSNW;
     private ImageButton black;
     private ImageButton white;
+    private ImageButton musicPlay;
+    private ImageButton musicNoplay;
+    private ImageButton svitok;
+    private ImageButton rules;
 
     private Music SFXClick;
 
-
-    private Music gameplayMusic;
 
     private String figure_chosen = "0";
     private String figure_drawing = "0";
@@ -82,9 +84,10 @@ public class HotSeatScreen implements Screen{
         stage = new Stage(viewport,game.spriteBatch);
         Gdx.input.setInputProcessor(stage);
         prepare();
-        gameplayMusic = game.gm.getGameplayMusic();
-        gameplayMusic.play();
-        gameplayMusic.setLooping(true);
+        game.music = game.gm.getGameplayMusic();
+        game.music.setVolume(0.5f);
+        game.music.play();
+        game.music.setLooping(true);
         playboard = new Board();
         game.im = new InputManager(camera);
         boardInit();
@@ -95,6 +98,13 @@ public class HotSeatScreen implements Screen{
         board = game.gm.getBoard();
         SFXClick = game.gm.getSFXClick();
         turn_texture = game.gm.getPlayer_1_choosing();
+
+
+        musicPlay = game.gm.getMusicPlay();
+        musicNoplay = game.gm.getMusic_noplay();
+        svitok = game.gm.getSvitok();
+        rules = game.gm.getRules();
+
 
         FigureHRHB = game.gm.getFigureHRHB();
         FigureHRNB = game.gm.getFigureHRNB();
@@ -152,6 +162,11 @@ public class HotSeatScreen implements Screen{
         stage.addActor(black);
         stage.addActor(white);
 
+        stage.addActor(musicPlay);
+        stage.addActor(musicNoplay);
+        stage.addActor(svitok);
+        stage.addActor(rules);
+
     }
 
     private void boardInit(){
@@ -177,6 +192,7 @@ public class HotSeatScreen implements Screen{
         game.spriteBatch.draw(wooden_field,0,0);
         game.spriteBatch.draw(board,0,800,1100,1100);
         game.spriteBatch.draw(turn_texture,0,720);
+        win_check();
         drawBoard();
         if (!choosing) {
             game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y);
@@ -198,65 +214,79 @@ public class HotSeatScreen implements Screen{
                 if (a && b) {
                     moving = false;
                     fp = new FigurePlace(figure_drawing, playboard, place.x, place.y);
-                    if(wf.checkBoard(playboard) == 1) {
-                        if (game.turn == 1) {
-                            Gdx.app.log("win","winner"+1);
-                            gameplayMusic.stop();
-                            gameplayMusic.setLooping(false);
-                            game.setScreen(new EndingScreen(game,1));
-                            dispose();
-                        } else if (game.turn == 2) {
-                            Gdx.app.log("win","winner"+2);
-                            gameplayMusic.stop();
-                            gameplayMusic.setLooping(false);
-                            game.setScreen(new EndingScreen(game, 2));
-                            dispose();
-                        }
-                    } else if (wf.checkBoard(playboard) == 2){
-                        game.setScreen(new EndingScreen(game,3));
-                        dispose();
-                    }
+                    enableButtons();
                 }
             game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y,chosen_figure.getRegionWidth()*chosen_scale,chosen_figure.getRegionHeight()*chosen_scale);
         }
-        game.font.draw(game.spriteBatch, "X =" +  game.screenx, 10, 1800);
-        game.font.draw(game.spriteBatch, "Y =" + game.screeny, 10, 1700);
-        game.font.draw(game.spriteBatch, "Turn =" + game.turn, 10, 1600);
         game.spriteBatch.end();
         stage.draw();
 
     }
 
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height);
+    private void win_check(){
+        if(wf.checkBoard(playboard) == 1) {
+            if (game.turn == 1) {
+                Gdx.app.log("winner","winner"+1);
+                game.music.stop();
+                game.music.setLooping(false);
+                game.setScreen(new EndingScreen(game,1));
+                dispose();
+            } else {
+                Gdx.app.log("winner","winner"+2);
+                game.music.stop();
+                game.music.setLooping(false);
+                game.setScreen(new EndingScreen(game, 2));
+                dispose();
+            }
+        } else if (wf.checkBoard(playboard) == 2){
+            game.setScreen(new EndingScreen(game,3));
+            dispose();
+        }
+    }
+    private void disableButtons(){
+        FigureHRHB.setDisabled(true);
+        FigureHRNB.setDisabled(true);
+        FigureHSHB.setDisabled(true);
+        FigureHSNB.setDisabled(true);
+        FigureLRHB.setDisabled(true);
+        FigureLRNB.setDisabled(true);
+        FigureLSHB.setDisabled(true);
+        FigureLSNB.setDisabled(true);
+        FigureHRHW.setDisabled(true);
+        FigureHRNW.setDisabled(true);
+        FigureHSHW.setDisabled(true);
+        FigureHSNW.setDisabled(true);
+        FigureLRHW.setDisabled(true);
+        FigureLRNW.setDisabled(true);
+        FigureLSHW.setDisabled(true);
+        FigureLSNW.setDisabled(true);
     }
 
-    @Override
-    public void pause() {
-
+    private void enableButtons(){
+        FigureHRHB.setDisabled(false);
+        FigureHRNB.setDisabled(false);
+        FigureHSHB.setDisabled(false);
+        FigureHSNB.setDisabled(false);
+        FigureLRHB.setDisabled(false);
+        FigureLRNB.setDisabled(false);
+        FigureLSHB.setDisabled(false);
+        FigureLSNB.setDisabled(false);
+        FigureHRHW.setDisabled(false);
+        FigureHRNW.setDisabled(false);
+        FigureHSHW.setDisabled(false);
+        FigureHSNW.setDisabled(false);
+        FigureLRHW.setDisabled(false);
+        FigureLRNW.setDisabled(false);
+        FigureLSHW.setDisabled(false);
+        FigureLSNW.setDisabled(false);
     }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
-    }
-
 
     private void check(){
         figure_chosen = game.gm.getFigureChosen();
-        if (!figure_chosen.equals("0"))
+        if (!figure_chosen.equals("0")) {
             choosing = false;
+            disableButtons();
+        }
         if (!choosing) {
             switchturn();
             chosen_figure = game.gm.atlas.createSprite(figure_chosen);
@@ -354,10 +384,37 @@ public class HotSeatScreen implements Screen{
         moving_coords = fp.getCellCoord(by);
         moving = true;
     }
+
     private double angleBetweenPoints(Vector2 a, Vector2 b)
     {
         Vector2 ab = new Vector2(b.x-a.x,b.y-a.y);
         Vector2 ac = new Vector2(a.x+Math.abs(ab.x),a.y);
         return (Math.PI - Math.acos((ab.x*ac.x+ab.y+ac.y)/(ab.len()*ac.len())));
     }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
+
 }
