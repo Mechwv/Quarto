@@ -20,8 +20,8 @@ public class AssetsLoader {
     public final String  retry = "images/turns&ending/play_again.png";
     public final String  black = "images/Circle_B.png";
     public final String  white = "images/Circle_W.png";
-    public final String  gameplayMusic = "sounds/GameplayMusic.wav";
-    public final String  menuMusic = "sounds/MenuMusic.wav";
+    public final String  gameplayMusic = "sounds/GameplayMusic.mp3";
+    public final String  menuMusic = "sounds/MenuMusic.mp3";
 
     public final String  scroll = "images/buttons/knopkasvitka.png";
     public final String  rules = "images/buttons/rules3.png";
