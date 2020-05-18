@@ -61,6 +61,8 @@ public class Lobby implements Screen {
         if (!match_status)
             game.font.draw(game.spriteBatch, "Waiting for player 2", 300, 1000);
         else {
+            waitingMusic.stop();
+            waitingMusic.setLooping(false);
             game.setScreen(new MultiplayerScreen(game, socket, player, room));
             dispose();
         }
