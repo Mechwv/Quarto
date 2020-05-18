@@ -426,6 +426,7 @@ public class MultiplayerScreen implements Screen {
                 Gdx.app.log("SocketIO", "Got info");
                 try {
                     int winner = data.getInt("winner");
+                    Gdx.app.log("SocketIO", "winner is " + winner + " player is "+ player);
                     game.setScreen(new MultiplayerEndingScreen(game, winner, player));
                     socket.emit("disconnect");
                     dispose();
