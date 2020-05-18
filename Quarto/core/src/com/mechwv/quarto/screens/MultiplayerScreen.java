@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -62,6 +64,9 @@ public class MultiplayerScreen implements Screen {
     private ImageButton FigureLRNW;
     private ImageButton FigureLSHW;
     private ImageButton FigureLSNW;
+
+    private Map<String, ImageButton> buttons = new HashMap<String, ImageButton>();
+
     private ImageButton black;
     private ImageButton white;
     private Music SFXClick;
@@ -157,6 +162,24 @@ public class MultiplayerScreen implements Screen {
         black = game.gm.getBlack();
         white = game.gm.getWhite();
 
+        buttons.put("FigureHRHB", FigureHRHB);
+        buttons.put("FigureHRNB", FigureHRNB);
+        buttons.put("FigureHSHB", FigureHSHB);
+        buttons.put("FigureHSNB", FigureHSNB);
+        buttons.put("FigureLRHB", FigureLRHB);
+        buttons.put("FigureLRNB", FigureLRNB);
+        buttons.put("FigureLSHB", FigureLSHB);
+        buttons.put("FigureLSNB", FigureLSNB);
+        buttons.put("FigureHRHW", FigureHRHW);
+        buttons.put("FigureHRNW", FigureHRNW);
+        buttons.put("FigureHSHW", FigureHSHW);
+        buttons.put("FigureHSNW", FigureHSNW);
+        buttons.put("FigureLRHW", FigureLRHW);
+        buttons.put("FigureLRNW", FigureLRNW);
+        buttons.put("FigureLSHW", FigureLSHW);
+        buttons.put("FigureLSNW", FigureLSNW);
+
+
         FigureHRHW.setDisabled(true);
         FigureHRHW.setVisible(false);
         FigureHRNW.setDisabled(true);
@@ -173,6 +196,7 @@ public class MultiplayerScreen implements Screen {
         FigureLSHW.setVisible(false);
         FigureLSNW.setDisabled(true);
         FigureLSNW.setVisible(false);
+
 
         stage.addActor(FigureHRHB);
         stage.addActor(FigureHRNB);
@@ -206,6 +230,7 @@ public class MultiplayerScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        checkButtons();
         try {
             check();
         } catch (JSONException e) {
@@ -439,6 +464,23 @@ public class MultiplayerScreen implements Screen {
         FigureLRNB.setDisabled(false);
         FigureLSHB.setDisabled(false);
         FigureLSNB.setDisabled(false);
+        FigureHRHW.setDisabled(false);
+        FigureHRNW.setDisabled(false);
+        FigureHSHW.setDisabled(false);
+        FigureHSNW.setDisabled(false);
+        FigureLRHW.setDisabled(false);
+        FigureLRNW.setDisabled(false);
+        FigureLSHW.setDisabled(false);
+        FigureLSNW.setDisabled(false);
+    }
+
+    private void checkButtons() {
+        for (int i = 0; i < 16; i++) {
+            if (!playboard.board[i].equals("-")) {
+                buttons.get(playboard.board[i]).setDisabled(true);
+                buttons.get(playboard.board[i]).setVisible(false);
+            }
+        }
     }
 
 
