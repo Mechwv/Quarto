@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "99382680624",
+    "firebase_url": "https://quarto-multiplayer.firebaseio.com",
+    "project_id": "quarto-multiplayer",
+    "storage_bucket": "quarto-multiplayer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99382680624:android:3b1cca0453fc5a4c9961f5",
+        "android_client_info": {
+          "package_name": "com.mechwv.quarto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "99382680624-4q19ptd3qdk0it204pg2l4iu89dd7mpf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mechwv.quarto",
+            "certificate_hash": "c828e9f9f71236a8dfbe215326b9b9def4ff9872"
+          }
+        },
+        {
+          "client_id": "99382680624-s5f3hrqlgdj6ri2dcoane1auuajco8hp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6YEYGZ75fy8aOw3OUGWtRGgFFsFQdGYI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "99382680624-s5f3hrqlgdj6ri2dcoane1auuajco8hp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

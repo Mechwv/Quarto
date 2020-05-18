@@ -46,5 +46,12 @@ io.on('connection', function(socket) {
               turn: turn
         })
     });
+
+    socket.on('gameEnd', function(room, winner) {
+            console.log("The winner is Player ", winner);
+            io.in(room).emit('winner', {
+                          winner: winner
+             })
+    });
 });
 
