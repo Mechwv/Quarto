@@ -2,7 +2,6 @@ package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,7 +25,6 @@ public class Lobby implements Screen {
     private Viewport viewport;
 
     private Texture wooden_field;
-    private Music waitingMusic;
 
     private boolean match_status;
     private io.socket.client.Socket socket;
@@ -42,9 +40,9 @@ public class Lobby implements Screen {
         stage = new Stage(viewport,game.spriteBatch);
         Gdx.input.setInputProcessor(stage);
         wooden_field = game.gm.getWooden_field();
-        waitingMusic = game.assets.manager.get(game.assets.menuMusic);
-        waitingMusic.play();
-        waitingMusic.setLooping(true);
+        game.music = game.assets.manager.get(game.assets.menuMusic);
+        game.music.play();
+        game.music.setLooping(true);
 
         connectSocket();
         configSocketEvents();
@@ -61,8 +59,8 @@ public class Lobby implements Screen {
         if (!match_status)
             game.font.draw(game.spriteBatch, "Waiting for player 2", 300, 1000);
         else {
-            waitingMusic.stop();
-            waitingMusic.setLooping(false);
+            game.music.stop();
+            game.music.setLooping(false);
             game.setScreen(new MultiplayerScreen(game, socket, player, room));
             dispose();
         }

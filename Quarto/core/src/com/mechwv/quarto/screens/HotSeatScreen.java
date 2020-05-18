@@ -48,11 +48,13 @@ public class HotSeatScreen implements Screen{
     private ImageButton FigureLSNW;
     private ImageButton black;
     private ImageButton white;
+    private ImageButton musicPlay;
+    private ImageButton musicNoplay;
+    private ImageButton svitok;
+    private ImageButton rules;
 
     private Music SFXClick;
 
-
-    private Music gameplayMusic;
 
     private String figure_chosen = "0";
     private String figure_drawing = "0";
@@ -82,9 +84,10 @@ public class HotSeatScreen implements Screen{
         stage = new Stage(viewport,game.spriteBatch);
         Gdx.input.setInputProcessor(stage);
         prepare();
-        gameplayMusic = game.gm.getGameplayMusic();
-        gameplayMusic.play();
-        gameplayMusic.setLooping(true);
+        game.music = game.gm.getGameplayMusic();
+        game.music.setVolume(0.5f);
+        game.music.play();
+        game.music.setLooping(true);
         playboard = new Board();
         game.im = new InputManager(camera);
         boardInit();
@@ -95,6 +98,13 @@ public class HotSeatScreen implements Screen{
         board = game.gm.getBoard();
         SFXClick = game.gm.getSFXClick();
         turn_texture = game.gm.getPlayer_1_choosing();
+
+
+        musicPlay = game.gm.getMusicPlay();
+        musicNoplay = game.gm.getMusic_noplay();
+        svitok = game.gm.getSvitok();
+        rules = game.gm.getRules();
+
 
         FigureHRHB = game.gm.getFigureHRHB();
         FigureHRNB = game.gm.getFigureHRNB();
@@ -152,6 +162,11 @@ public class HotSeatScreen implements Screen{
         stage.addActor(black);
         stage.addActor(white);
 
+        stage.addActor(musicPlay);
+        stage.addActor(musicNoplay);
+        stage.addActor(svitok);
+        stage.addActor(rules);
+
     }
 
     private void boardInit(){
@@ -203,9 +218,7 @@ public class HotSeatScreen implements Screen{
                 }
             game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y,chosen_figure.getRegionWidth()*chosen_scale,chosen_figure.getRegionHeight()*chosen_scale);
         }
-        game.font.draw(game.spriteBatch, "X =" +  game.screenx, 10, 1800);
-        game.font.draw(game.spriteBatch, "Y =" + game.screeny, 10, 1700);
-        game.font.draw(game.spriteBatch, "Turn =" + game.turn, 10, 1600);
+        game.font.draw(game.spriteBatch, "Turn =" + game.turn, 10, 1680);
         game.spriteBatch.end();
         stage.draw();
 
@@ -215,14 +228,14 @@ public class HotSeatScreen implements Screen{
         if(wf.checkBoard(playboard) == 1) {
             if (game.turn == 1) {
                 Gdx.app.log("winner","winner"+1);
-                gameplayMusic.stop();
-                gameplayMusic.setLooping(false);
+                game.music.stop();
+                game.music.setLooping(false);
                 game.setScreen(new EndingScreen(game,1));
                 dispose();
             } else {
                 Gdx.app.log("winner","winner"+2);
-                gameplayMusic.stop();
-                gameplayMusic.setLooping(false);
+                game.music.stop();
+                game.music.setLooping(false);
                 game.setScreen(new EndingScreen(game, 2));
                 dispose();
             }

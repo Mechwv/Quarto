@@ -69,6 +69,8 @@ public class MultiplayerScreen implements Screen {
 
     private ImageButton black;
     private ImageButton white;
+    private ImageButton sound;
+    private ImageButton rules;
     private Music SFXClick;
 
     private String figure_chosen = "0";
