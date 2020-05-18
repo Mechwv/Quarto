@@ -1,6 +1,7 @@
 package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -220,7 +221,17 @@ public class HotSeatScreen implements Screen{
         }
         game.spriteBatch.end();
         stage.draw();
+        backTo();
+    }
 
+
+    private void backTo() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            Gdx.app.log("SocketIO", " disconnecting...");
+            game.music.stop();
+            game.setScreen(new MainMenuScreen(game, true));
+            dispose();
+        }
     }
 
     private void win_check(){

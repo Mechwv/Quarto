@@ -277,7 +277,7 @@ public class GameManager {
             public void changed(ChangeEvent event, Actor actor) {
                 SFXClick.play();
                 retry.remove();
-                game.setScreen(new MainMenuScreen(game));
+                game.setScreen(new MainMenuScreen(game,false));
                 update();
             }
         });

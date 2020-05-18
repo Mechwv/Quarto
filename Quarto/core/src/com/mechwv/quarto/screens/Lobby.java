@@ -1,18 +1,12 @@
 package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mechwv.quarto.GameRoot;
@@ -32,10 +26,6 @@ public class Lobby implements Screen {
     private Viewport viewport;
 
     private Texture wooden_field;
-    private Texture myTexture;
-    private TextureRegion myTextureRegion;
-    private ImageButton returnMenu;
-    private Music SFXClick;
 
     private boolean match_status;
     private io.socket.client.Socket socket;
@@ -51,32 +41,11 @@ public class Lobby implements Screen {
         stage = new Stage(viewport,game.spriteBatch);
         Gdx.input.setInputProcessor(stage);
 
-        SFXClick = game.assets.manager.get(game.assets.SFXclick);
         wooden_field = game.gm.getWooden_field();
         game.music = game.assets.manager.get(game.assets.menuMusic);
         game.music.setVolume(0.5f);
         game.music.play();
         game.music.setLooping(true);
-        myTexture = game.assets.manager.get(game.assets.return_back);
-        myTextureRegion = new TextureRegion(myTexture);
-        Drawable drawable = new TextureRegionDrawable(myTextureRegion);
-        returnMenu = new ImageButton(drawable);
-        returnMenu.setPosition((40),(300));
-        returnMenu.addListener(new ChangeListener(){
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.log("RRRRR", "click");
-                SFXClick.play();
-                Gdx.app.log("SocketIO", " disconnecting...");
-                socket.emit("disconnect");
-                socket.disconnect();
-                game.music.stop();
-                game.setScreen(new MainMenuScreen(game));
-                dispose();
-            }
-        });
-
-        stage.addActor(returnMenu);
         connectSocket();
         configSocketEvents();
     }
@@ -97,7 +66,7 @@ public class Lobby implements Screen {
             dispose();
         }
         game.spriteBatch.end();
-
+        backTo();
         stage.draw();
     }
 
@@ -112,6 +81,16 @@ public class Lobby implements Screen {
         }
     }
 
+    private void backTo(){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
+            Gdx.app.log("SocketIO", " disconnecting...");
+            socket.emit("disconnect");
+            socket.disconnect();
+            game.music.stop();
+            game.setScreen(new MainMenuScreen(game, true));
+            dispose();
+        }
+    }
 
 
     private void configSocketEvents() {

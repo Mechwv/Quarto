@@ -1,6 +1,7 @@
 package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -260,7 +261,7 @@ public class MultiplayerScreen implements Screen {
         game.font.draw(game.spriteBatch, "Player " + player, 400, 1840);
         game.spriteBatch.end();
         stage.draw();
-
+        backTo();
     }
 
 
@@ -445,6 +446,20 @@ public class MultiplayerScreen implements Screen {
                 }
             }
         });
+    }
+
+    private void backTo() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            Gdx.app.log("SocketIO", " disconnecting...");
+            socket.emit("disconnect");
+            if (player == 1) {
+                socket.emit("gameEnd", room, 2);
+            } else socket.emit("gameEnd", room, 1);
+            socket.disconnect();
+            game.music.stop();
+            game.setScreen(new MainMenuScreen(game, true));
+            dispose();
+        }
     }
 
     private void disableButtons(){

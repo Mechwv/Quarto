@@ -1,6 +1,7 @@
 package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -58,7 +59,16 @@ public class MultiplayerEndingScreen implements Screen {
         game.spriteBatch.draw(winning,40,game.virtual_screen_height/2+300);
         game.spriteBatch.end();
         stage.draw();
+        backTo();
     }
+
+    private void backTo() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            game.setScreen(new MainMenuScreen(game, true));
+            dispose();
+        }
+    }
+
 
     @Override
     public void resize(int width, int height) {

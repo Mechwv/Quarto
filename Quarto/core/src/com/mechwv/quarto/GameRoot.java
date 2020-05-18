@@ -40,7 +40,7 @@ public class GameRoot extends Game {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 80;
         font = generator.generateFont(parameter);
-		this.setScreen(new MainMenuScreen(this));
+		this.setScreen(new MainMenuScreen(this,false));
 	}
 
 	@Override
