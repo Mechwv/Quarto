@@ -2,7 +2,6 @@ package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,7 +18,7 @@ import com.mechwv.quarto.gameplay.WinFinder;
 import com.mechwv.quarto.managers.InputManager;
 import com.mechwv.quarto.objects.Board;
 
-public class MultiPlayerScreen implements Screen{
+public class HotSeatScreen implements Screen{
     private GameRoot game;
     private final Stage stage;
 
@@ -56,22 +55,26 @@ public class MultiPlayerScreen implements Screen{
     private Music gameplayMusic;
 
     private String figure_chosen = "0";
+    private String figure_drawing = "0";
 
     private Board playboard;
 
     private boolean choosing = true;
-    private boolean placed = false;
     private boolean moving = false;
-    private boolean player_1_won = false;
 
     FigurePlace fp = new FigurePlace();
     WinFinder wf = new WinFinder();
 
+    private float chosen_scale = 0.9f;
     private Vector2 chosen_coords = new Vector2(900,600);
     private Vector2 moving_coords = new Vector2();
+    private Vector2 current_coords = new Vector2();
+    private Vector2 place = new Vector2();
     private double angle;
 
-    public MultiPlayerScreen(final GameRoot game){
+
+
+    public HotSeatScreen(final GameRoot game){
         this.game = game;
         camera = new OrthographicCamera();
         viewport = new StretchViewport(game.virtual_screen_width,game.virtual_screen_height);
@@ -174,26 +177,51 @@ public class MultiPlayerScreen implements Screen{
         game.spriteBatch.draw(wooden_field,0,0);
         game.spriteBatch.draw(board,0,800,1100,1100);
         game.spriteBatch.draw(turn_texture,0,720);
+        drawBoard();
         if (!choosing) {
-            if (moving) {
-                if ((chosen_figure.getX() > moving_coords.x) && (chosen_figure.getY() < moving_coords.y)) {
-                    Gdx.app.log("distance", "CoordsX:" + chosen_figure.getX() + "CoordsY:" + chosen_figure.getX());
-                    if (chosen_figure.getX() > moving_coords.x)
-                        chosen_figure.setX(chosen_figure.getX() - 1 * delta);
-                        // ((float) Math.sin(angle * Math.PI / 180) * 0.001f)
-                    if (chosen_figure.getY() < moving_coords.y)
-                        chosen_figure.setY(chosen_figure.getY() +  1 * delta);
-                } else {
-                    moving = false;
-                }
-            }
-            game.spriteBatch.draw(chosen_figure,chosen_figure.getX(),chosen_figure.getY());
+            game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y);
         }
-
+        if (moving) {
+                Gdx.app.log("Moving", "true,  x= " + moving_coords.x + " y= " + moving_coords.y);
+                boolean a = false, b = false;
+                if (current_coords.x > moving_coords.x) {
+                    current_coords.x -= 2500 * delta * Math.abs(Math.cos(angle)) ;
+                }
+                else
+                    a = true;
+                if (current_coords.y < moving_coords.y) {
+                    current_coords.y += 2000 * delta * Math.sin(angle);
+                }
+                else
+                    b = true;
+                Gdx.app.log("Moving", " x=" + current_coords.x + " y=" + current_coords.y);
+                if (a && b) {
+                    moving = false;
+                    fp = new FigurePlace(figure_drawing, playboard, place.x, place.y);
+                    if(wf.checkBoard(playboard) == 1) {
+                        if (game.turn == 1) {
+                            Gdx.app.log("win","winner"+1);
+                            gameplayMusic.stop();
+                            gameplayMusic.setLooping(false);
+                            game.setScreen(new EndingScreen(game,1));
+                            dispose();
+                        } else if (game.turn == 2) {
+                            Gdx.app.log("win","winner"+2);
+                            gameplayMusic.stop();
+                            gameplayMusic.setLooping(false);
+                            game.setScreen(new EndingScreen(game, 2));
+                            dispose();
+                        }
+                    } else if (wf.checkBoard(playboard) == 2){
+                        game.setScreen(new EndingScreen(game,3));
+                        dispose();
+                    }
+                }
+            game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y,chosen_figure.getRegionWidth()*chosen_scale,chosen_figure.getRegionHeight()*chosen_scale);
+        }
         game.font.draw(game.spriteBatch, "X =" +  game.screenx, 10, 1800);
         game.font.draw(game.spriteBatch, "Y =" + game.screeny, 10, 1700);
-        //game.font.draw(game.spriteBatch, "Turn = " + game.turn, 10, 1600);
-        drawBoard();
+        game.font.draw(game.spriteBatch, "Turn =" + game.turn, 10, 1600);
         game.spriteBatch.end();
         stage.draw();
 
@@ -227,14 +255,17 @@ public class MultiPlayerScreen implements Screen{
 
     private void check(){
         figure_chosen = game.gm.getFigureChosen();
-        if (!figure_chosen.equals("0")) choosing = false;
+        if (!figure_chosen.equals("0"))
+            choosing = false;
         if (!choosing) {
             switchturn();
             chosen_figure = game.gm.atlas.createSprite(figure_chosen);
             Gdx.input.setInputProcessor(game.im);
 
-            chosen_figure.setX(chosen_coords.x);
-            chosen_figure.setY(chosen_coords.y);
+            if (!moving) {
+                current_coords.x = chosen_coords.x;
+                current_coords.y = chosen_coords.y;
+            }
 
             if (Gdx.input.isTouched()) {
                 Gdx.app.log("RRRRR", "placing figure");
@@ -242,22 +273,19 @@ public class MultiPlayerScreen implements Screen{
                 game.screeny = game.im.getCoordY();
             }
             if (fp.place_check(playboard,game.screenx,game.screeny)) {
-                Gdx.app.log("RRRRR", "place checked");
-                fp = new FigurePlace(figure_chosen, playboard, game.screenx, game.screeny);
-                placed = true;
-                dist_calc(chosen_coords,new Vector2(game.screenx,game.screeny));
-                if(wf.checkBoard(playboard)) {
-                    if (game.turn == 4) player_1_won = true;
-                    gameplayMusic.stop();
-                    gameplayMusic.setLooping(false);
-                    game.setScreen(new EndingScreen(game,player_1_won));
-                    dispose();
-                }
-                game.gm.setFigureChosen("0");
                 checkturn();
+                place.x = game.screenx;
+                place.y = game.screeny;
+                figure_drawing = figure_chosen;
+
+                Gdx.app.log("RRRRR", "place checked");
+                chosen_scale = check_scale(fp.getBoardCell(game.screenx,game.screeny));
+                current_coords.x = chosen_coords.x;
+                current_coords.y = chosen_coords.y;
+
+                dist_calc(chosen_coords,fp.getCellCoord(fp.getBoardCell(game.screenx,game.screeny)));
                 choosing = true;
-                game.screenx = 0;
-                game.screeny = 0;
+                game.gm.setFigureChosen("0");
             }
         }
         else
@@ -319,6 +347,8 @@ public class MultiPlayerScreen implements Screen{
     }
 
     private void dist_calc(Vector2 a, Vector2 b){
+        b.x+=60;
+        b.y+=30;
         angle = angleBetweenPoints(a,b);
         byte by = fp.getBoardCell(b.x,b.y);
         moving_coords = fp.getCellCoord(by);
@@ -326,7 +356,8 @@ public class MultiPlayerScreen implements Screen{
     }
     private double angleBetweenPoints(Vector2 a, Vector2 b)
     {
-        Gdx.app.log("Angle", "= " + (180 - (Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI)));
-        return  (180 - (Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI));
+        Vector2 ab = new Vector2(b.x-a.x,b.y-a.y);
+        Vector2 ac = new Vector2(a.x+Math.abs(ab.x),a.y);
+        return (Math.PI - Math.acos((ab.x*ac.x+ab.y+ac.y)/(ab.len()*ac.len())));
     }
 }
