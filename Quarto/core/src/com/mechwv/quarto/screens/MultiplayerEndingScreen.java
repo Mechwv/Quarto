@@ -33,7 +33,7 @@ public class MultiplayerEndingScreen implements Screen {
         this.game = game;
         retry = game.gm.getRetry();
         board = game.gm.getEnd_board();
-        if (winner == 2)  {winning = game.gm.getDraw();}
+        if (winner == 3)  {winning = game.gm.getDraw();}
         else {
             if (winner == player) {
                 winning = game.gm.getYou_win();

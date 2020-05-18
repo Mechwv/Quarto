@@ -42,7 +42,6 @@ public class MultiplayerScreen implements Screen {
     private OrthographicCamera camera;
     private Viewport viewport;
     private Texture wooden_field;
-    private Music gameplayMusic;
     private Texture board;
     private Texture turn_texture;
     private Sprite chosen_figure;
@@ -69,7 +68,6 @@ public class MultiplayerScreen implements Screen {
 
     private ImageButton black;
     private ImageButton white;
-    private ImageButton sound;
     private ImageButton rules;
     private ImageButton musicPlay;
     private ImageButton musicNoplay;
@@ -82,9 +80,7 @@ public class MultiplayerScreen implements Screen {
 
     private Board playboard;
 
-    private boolean choosing = true;
     private boolean moving = false;
-    private boolean player_1_won = false;
 
     FigurePlace fp = new FigurePlace();
     WinFinder wf = new WinFinder();
@@ -96,7 +92,6 @@ public class MultiplayerScreen implements Screen {
     private Vector2 place = new Vector2();
     private double angle;
 
-    private boolean match_status;
     private io.socket.client.Socket socket;
     private int player;
     private String room;
@@ -115,9 +110,9 @@ public class MultiplayerScreen implements Screen {
         this.room = room;
 
         prepare();
-        gameplayMusic = game.gm.getGameplayMusic();
-        gameplayMusic.play();
-        gameplayMusic.setLooping(true);
+        game.music = game.gm.getGameplayMusic();
+        game.music.play();
+        game.music.setLooping(true);
         playboard = new Board();
         game.im = new InputManager(camera);
         boardInit();
@@ -390,8 +385,8 @@ public class MultiplayerScreen implements Screen {
                         socket.emit("gameEnd",room, 1);
                     }
                     else socket.emit("gameEnd",room, 2);
-                    gameplayMusic.stop();
-                    gameplayMusic.setLooping(false);
+                    game.music.stop();
+                    game.music.setLooping(false);
                 } else if (wf.checkBoard(playboard) == 2){
                     socket.emit("gameEnd",room, 3);
                 }
@@ -441,6 +436,7 @@ public class MultiplayerScreen implements Screen {
                 try {
                     int winner = data.getInt("winner");
                     Gdx.app.log("SocketIO", "winner is " + winner + " player is "+ player);
+                    game.music.stop();
                     game.setScreen(new MultiplayerEndingScreen(game, winner, player));
                     socket.emit("disconnect");
                     dispose();

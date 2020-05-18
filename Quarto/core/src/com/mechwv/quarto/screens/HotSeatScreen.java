@@ -191,7 +191,7 @@ public class HotSeatScreen implements Screen{
         game.spriteBatch.begin();
         game.spriteBatch.draw(wooden_field,0,0);
         game.spriteBatch.draw(board,0,800,1100,1100);
-        game.spriteBatch.draw(turn_texture,0,720);
+        game.spriteBatch.draw(turn_texture,-70,720);
         win_check();
         drawBoard();
         if (!choosing) {
