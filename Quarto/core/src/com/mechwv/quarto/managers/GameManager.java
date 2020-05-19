@@ -82,6 +82,7 @@ public class GameManager {
         setupButtons();
         setupMisc();
         setFigureChosen("0");
+        game.turn = 1;
     }
 
     private void setupButtons(){

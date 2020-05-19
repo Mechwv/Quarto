@@ -37,7 +37,6 @@ public class MultiplayerEndingScreen implements Screen {
         viewport = new StretchViewport(game.virtual_screen_width,game.virtual_screen_height);
         viewport.setCamera(camera);
         stage = new Stage(viewport,game.spriteBatch);
-        Gdx.input.setInputProcessor(stage);
         this.game = game;
 
         SFXclick = game.gm.getSFXClick();
@@ -49,18 +48,22 @@ public class MultiplayerEndingScreen implements Screen {
         retry.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.log("restart", "CLICKAAAAA");
                 SFXclick.play();
                 game.gm.update();
                 game.setScreen(new MainMenuScreen(game,false));
             }
         });
         board = game.gm.getEnd_board();
-        if (winner == 3)  {winning = game.gm.getDraw();}
+        if (winner == 3) {
+            winning = game.gm.getDraw();
+        }
         else {
             if (winner == player) {
                 winning = game.gm.getYou_win();
             } else winning = game.gm.getYou_lose();
         }
+        Gdx.input.setInputProcessor(stage);
         stage.addActor(retry);
 
     }

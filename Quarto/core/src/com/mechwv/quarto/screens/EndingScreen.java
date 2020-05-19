@@ -51,7 +51,7 @@ public class EndingScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 SFXclick.play();
                 game.gm.update();
-                game.setScreen(new MainMenuScreen(game,false));
+                game.setScreen(new MainMenuScreen(new GameRoot(),false));
             }
         });
         board = game.gm.getEnd_board();
