@@ -2,14 +2,17 @@ package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mechwv.quarto.GameRoot;
+import com.mechwv.quarto.managers.InputManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,12 +29,17 @@ public class Lobby implements Screen {
     private Viewport viewport;
 
     private Texture wooden_field;
+    private ImageButton rules;
+    private ImageButton musicPlay;
+    private ImageButton musicNoplay;
+    private ImageButton svitok;
 
     private boolean match_status;
     private io.socket.client.Socket socket;
     private String room;
 
     private int player=0;
+    private int touches = 0;
 
     public Lobby(final GameRoot game){
         this.game = game;
@@ -39,17 +47,30 @@ public class Lobby implements Screen {
         viewport = new StretchViewport(game.virtual_screen_width,game.virtual_screen_height);
         viewport.setCamera(camera);
         stage = new Stage(viewport,game.spriteBatch);
-        Gdx.input.setInputProcessor(stage);
+        prepare();
+        connectSocket();
+        configSocketEvents();
+        game.im = new InputManager(camera);
+        InputMultiplexer multiplexer = new InputMultiplexer(game.im,stage);
+        Gdx.input.setInputProcessor(multiplexer);
+    }
 
+    private void prepare(){
         wooden_field = game.gm.getWooden_field();
+        rules = game.gm.getRules();
+        svitok = game.gm.getSvitok();
+        musicPlay = game.gm.getMusicPlay();
+        musicNoplay = game.gm.getMusic_noplay();
         game.music = game.assets.manager.get(game.assets.menuMusic);
         game.music.setVolume(0.5f);
         game.music.play();
         game.music.setLooping(true);
-        connectSocket();
-        configSocketEvents();
-    }
+        stage.addActor(musicPlay);
+        stage.addActor(musicNoplay);
+        stage.addActor(rules);
+        stage.addActor(svitok);
 
+    }
 
     @Override
     public void render(float delta) {
@@ -58,8 +79,10 @@ public class Lobby implements Screen {
         game.spriteBatch.setProjectionMatrix(camera.combined);
         game.spriteBatch.begin();
         game.spriteBatch.draw(wooden_field,0,0);
-        if (!match_status)
+        if (!match_status) {
             game.font.draw(game.spriteBatch, "Waiting for player 2", 150, 1000);
+            hint();
+        }
         else {
             game.music.stop();
             game.setScreen(new MultiplayerScreen(game, socket, player, room));
@@ -70,6 +93,34 @@ public class Lobby implements Screen {
         stage.draw();
     }
 
+    private void hint(){
+        game.font.draw(game.spriteBatch, "Hint: ", 450, 800);
+        switch (game.im.getTouches()) {
+            case 0:{
+                game.small_font.draw(game.spriteBatch, "Tap to change hint", 280, 700);
+                break;
+            }
+            case 1:{
+                game.small_font.draw(game.spriteBatch, "If the search takes a long time", 100, 700);
+                game.small_font.draw(game.spriteBatch, "restart it by pressing back", 140, 650);
+                break;
+            }
+            case 2:{
+                game.small_font.draw(game.spriteBatch, "Check out the rules", 200, 700);
+                game.small_font.draw(game.spriteBatch, "in top right corner", 200, 650);
+                break;
+            }
+            case 3:{
+                game.small_font.draw(game.spriteBatch, "Turn off the music", 200, 700);
+                game.small_font.draw(game.spriteBatch, "in top left corner", 200, 650);
+                break;
+            }
+            default:{
+                game.im.setTouches(0);
+            }
+
+        }
+    }
 
     private void connectSocket(){
         try{

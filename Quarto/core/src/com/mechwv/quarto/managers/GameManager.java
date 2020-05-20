@@ -313,6 +313,7 @@ public class GameManager {
                 svitok.setVisible(true);
                 svitok.setDisabled(false);
                 rules.setVisible(false);
+
             }
         });
 
