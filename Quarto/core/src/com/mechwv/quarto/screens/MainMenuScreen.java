@@ -94,6 +94,11 @@ public class MainMenuScreen implements Screen {
         stage.addActor(multiPButton);
 
         SFXClick = game.assets.manager.get(game.assets.SFXclick);
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

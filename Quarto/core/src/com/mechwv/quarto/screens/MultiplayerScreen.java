@@ -502,6 +502,7 @@ public class MultiplayerScreen implements Screen {
                 try {
                     int winner = data.getInt("winner");
                     gameEnd(winner);
+                    figure_chosen = "0";
                     update();
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting info");
