@@ -56,10 +56,12 @@ public class MainMenuScreen implements Screen {
             back = false;
         }
         Gdx.input.setInputProcessor(stage);
+
         myTexture = game.assets.manager.get(game.assets.multiplayer);
         myTextureRegion = new TextureRegion(myTexture);
         Drawable drawable = new TextureRegionDrawable(myTextureRegion);
         singlePButton = new ImageButton(drawable);
+        singlePButton.setDisabled(true);
         singlePButton.setPosition((160),(250));
         singlePButton.addListener(new ChangeListener(){
             @Override
@@ -76,6 +78,7 @@ public class MainMenuScreen implements Screen {
         myTextureRegion = new TextureRegion(myTexture);
         drawable = new TextureRegionDrawable(myTextureRegion);
         multiPButton = new ImageButton(drawable);
+        multiPButton.setDisabled(true);
         multiPButton.setPosition((40),(560));
         multiPButton.addListener(new ChangeListener() {
             @Override
@@ -95,19 +98,20 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
-        render(0);
+
     }
 
     @Override
     public void render(float delta) {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
         game.spriteBatch.setProjectionMatrix(camera.combined);
         game.spriteBatch.begin();
         game.spriteBatch.draw(background, 0, 0,game.virtual_screen_width,game.virtual_screen_height);
         game.spriteBatch.end();
+        singlePButton.setDisabled(false);
+        multiPButton.setDisabled(false);
         exit();
         stage.draw();
     }

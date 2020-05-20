@@ -30,6 +30,7 @@ public class HotSeatScreen implements Screen{
     private Texture board;
     private Texture turn_texture;
     private Sprite chosen_figure;
+    private Texture texture = null;
 
     private ImageButton FigureHRHB;
     private ImageButton FigureHRNB;
@@ -54,7 +55,7 @@ public class HotSeatScreen implements Screen{
     private ImageButton svitok;
     private ImageButton rules;
 
-    private Music SFXClick;
+    private Music SFXclick;
 
 
     private String figure_chosen = "0";
@@ -64,6 +65,7 @@ public class HotSeatScreen implements Screen{
 
     private boolean choosing = true;
     private boolean moving = false;
+    private boolean end = false;
 
     FigurePlace fp = new FigurePlace();
     WinFinder wf = new WinFinder();
@@ -97,15 +99,14 @@ public class HotSeatScreen implements Screen{
     private void prepare(){
         wooden_field = game.gm.getWooden_field();
         board = game.gm.getBoard();
-        SFXClick = game.gm.getSFXClick();
         turn_texture = game.gm.getPlayer_1_choosing();
 
 
+        SFXclick = game.gm.getSFXClick();
         musicPlay = game.gm.getMusicPlay();
         musicNoplay = game.gm.getMusic_noplay();
         svitok = game.gm.getSvitok();
         rules = game.gm.getRules();
-
 
         FigureHRHB = game.gm.getFigureHRHB();
         FigureHRNB = game.gm.getFigureHRNB();
@@ -125,6 +126,8 @@ public class HotSeatScreen implements Screen{
         FigureLSNW = game.gm.getFigureLSNW();
         black = game.gm.getBlack();
         white = game.gm.getWhite();
+
+
 
         FigureHRHW.setDisabled(true);
         FigureHRHW.setVisible(false);
@@ -192,9 +195,13 @@ public class HotSeatScreen implements Screen{
         game.spriteBatch.begin();
         game.spriteBatch.draw(wooden_field,0,0);
         game.spriteBatch.draw(board,0,800,1100,1100);
-        game.spriteBatch.draw(turn_texture,-70,720);
-        win_check();
+        if (!end) {
+            game.spriteBatch.draw(turn_texture,-70,720);
+        }
+        else
+            game.spriteBatch.draw(texture,200,300);
         drawBoard();
+        win_check();
         if (!choosing) {
             game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y);
         }
@@ -241,20 +248,20 @@ public class HotSeatScreen implements Screen{
                 Gdx.app.log("winner","winner"+1);
                 game.music.stop();
                 game.music.setLooping(false);
-                game.setScreen(new EndingScreen(game,1));
-                dispose();
+                check_win(1);
             } else {
                 Gdx.app.log("winner","winner"+2);
                 game.music.stop();
                 game.music.setLooping(false);
-                game.setScreen(new EndingScreen(game, 2));
-                dispose();
+                check_win(2);
             }
+            end = true;
         } else if (wf.checkBoard(playboard) == 2){
-            game.setScreen(new EndingScreen(game,3));
-            dispose();
+            check_win(3);
+            end = true;
         }
     }
+
     private void disableButtons(){
         FigureHRHB.setDisabled(true);
         FigureHRNB.setDisabled(true);
@@ -292,6 +299,50 @@ public class HotSeatScreen implements Screen{
         FigureLSHW.setDisabled(false);
         FigureLSNW.setDisabled(false);
     }
+
+    private void hideButtons(){
+        FigureHRHB.setVisible(false);
+        FigureHRNB.setVisible(false);
+        FigureHSHB.setVisible(false);
+        FigureHSNB.setVisible(false);
+        FigureLRHB.setVisible(false);
+        FigureLRNB.setVisible(false);
+        FigureLSHB.setVisible(false);
+        FigureLSNB.setVisible(false);
+        FigureHRHW.setVisible(false);
+        FigureHRNW.setVisible(false);
+        FigureHSHW.setVisible(false);
+        FigureHSNW.setVisible(false);
+        FigureLRHW.setVisible(false);
+        FigureLRNW.setVisible(false);
+        FigureLSHW.setVisible(false);
+        FigureLSNW.setVisible(false);
+        white.setVisible(false);
+        black.setVisible(false);
+    }
+
+    private void check_win(int winner){
+        disableButtons();
+        hideButtons();
+        white.setDisabled(true);
+        black.setDisabled(true);
+        if (winner == 1){
+            texture = game.assets.manager.get(game.assets.player_1_won);
+        }
+        if (winner == 2){
+            texture = game.assets.manager.get(game.assets.player_2_won);
+        }
+        if (winner == 3){
+            texture = game.assets.manager.get(game.assets.draw);
+        }
+        game.gm.update();
+        if (Gdx.input.isTouched()) {
+            game.gm.update();
+            game.setScreen(new MainMenuScreen(game, false));
+            dispose();
+        }
+    }
+
 
     private void check(){
         figure_chosen = game.gm.getFigureChosen();

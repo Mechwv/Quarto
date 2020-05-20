@@ -34,7 +34,6 @@ public class GameManager {
     private ImageButton FigureLSNW;
     private ImageButton black;
     private ImageButton white;
-    private ImageButton retry;
     private ImageButton musicPlay;
     private ImageButton music_noplay;
     private ImageButton rules;
@@ -88,7 +87,6 @@ public class GameManager {
     private void setupButtons(){
         atlas = game.assets.manager.get(game.assets.figure_pack);
         skin = new Skin(atlas);
-
 
         FigureHRHB = new ImageButton(skin.getDrawable("FigureHRHB"));
         FigureHRHB.setPosition(100,50);
@@ -440,10 +438,6 @@ public class GameManager {
         return black;
     }
 
-    public ImageButton getRetry() {
-        return retry;
-    }
-
     public ImageButton getWhite() {
         return white;
     }
@@ -602,9 +596,9 @@ public class GameManager {
         return svitok;
     }
 
-
     public ImageButton getMusic_noplay() {
         return music_noplay;
     }
+
 
 }
