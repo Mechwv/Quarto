@@ -48,6 +48,21 @@ public class Lobby implements Screen {
         viewport.setCamera(camera);
         stage = new Stage(viewport,game.spriteBatch);
         prepare();
+        game.music = game.assets.manager.get(game.assets.menuMusic);
+        Gdx.app.log("Music", "volume" + game.music.getVolume());
+        if (!game.music_play) {
+            musicNoplay.setVisible(true);
+            musicNoplay.setDisabled(false);
+            musicPlay.setVisible(false);
+            musicPlay.setDisabled(true);
+        } else {
+            musicNoplay.setVisible(false);
+            musicNoplay.setDisabled(true);
+            musicPlay.setVisible(true);
+            musicPlay.setDisabled(false);
+            game.music.setVolume(0.5f);
+            game.music.play();
+        }
         connectSocket();
         configSocketEvents();
         game.im = new InputManager(camera);
@@ -61,10 +76,6 @@ public class Lobby implements Screen {
         svitok = game.gm.getSvitok();
         musicPlay = game.gm.getMusicPlay();
         musicNoplay = game.gm.getMusic_noplay();
-        game.music = game.assets.manager.get(game.assets.menuMusic);
-        game.music.setVolume(0.5f);
-        game.music.play();
-        game.music.setLooping(true);
         stage.addActor(musicPlay);
         stage.addActor(musicNoplay);
         stage.addActor(rules);

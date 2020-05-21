@@ -115,8 +115,19 @@ public class MultiplayerScreen implements Screen {
 
         texture = game.assets.manager.get(game.assets.you_win);
         game.music = game.gm.getGameplayMusic();
-        game.music.play();
-        game.music.setLooping(true);
+        if (!game.music_play) {
+            musicNoplay.setVisible(true);
+            musicNoplay.setDisabled(false);
+            musicPlay.setVisible(false);
+            musicPlay.setDisabled(true);
+        } else {
+            musicNoplay.setVisible(false);
+            musicNoplay.setDisabled(true);
+            musicPlay.setVisible(true);
+            musicPlay.setDisabled(false);
+            game.music.setVolume(0.5f);
+            game.music.play();
+        }
         playboard = new Board();
         game.im = new InputManager(camera);
         boardInit();
@@ -403,7 +414,6 @@ public class MultiplayerScreen implements Screen {
                         socket.emit("gameEnd",room, 2);
                     }
                     game.music.stop();
-                    game.music.setLooping(false);
                 } else if (wf.checkBoard(playboard) == 2){
                     game.gm.setFigureChosen("0");
                     update();

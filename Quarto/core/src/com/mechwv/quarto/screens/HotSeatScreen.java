@@ -88,9 +88,19 @@ public class HotSeatScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
         prepare();
         game.music = game.gm.getGameplayMusic();
-        game.music.setVolume(0.5f);
-        game.music.play();
-        game.music.setLooping(true);
+        if (!game.music_play) {
+            musicNoplay.setVisible(true);
+            musicNoplay.setDisabled(false);
+            musicPlay.setVisible(false);
+            musicPlay.setDisabled(true);
+        } else {
+            musicNoplay.setVisible(false);
+            musicNoplay.setDisabled(true);
+            musicPlay.setVisible(true);
+            musicPlay.setDisabled(false);
+            game.music.setVolume(0.5f);
+            game.music.play();
+        }
         playboard = new Board();
         game.im = new InputManager(camera);
         boardInit();
@@ -247,12 +257,10 @@ public class HotSeatScreen implements Screen{
             if (game.turn == 1) {
                 Gdx.app.log("winner","winner"+1);
                 game.music.stop();
-                game.music.setLooping(false);
                 check_win(1);
             } else {
                 Gdx.app.log("winner","winner"+2);
                 game.music.stop();
-                game.music.setLooping(false);
                 check_win(2);
             }
             end = true;

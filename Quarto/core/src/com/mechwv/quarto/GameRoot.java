@@ -27,6 +27,7 @@ public class GameRoot extends Game {
 	public int turn = 1;
 	public GameManager gm;
 	public Music music;
+	public boolean music_play = true;
 
 	public static final String FONT_CHARACTERS = "абвгдеёжзийклмнопрстуфхцчшщьыъэюяabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
 
@@ -45,6 +46,9 @@ public class GameRoot extends Game {
 		parameter.size = 60;
 		parameter.color = Color.YELLOW;
 		small_font = generator.generateFont(parameter);
+		music = assets.manager.get(assets.menuMusic);
+		music.setVolume(0.5f);
+		music.setLooping(true);
 		this.setScreen(new MainMenuScreen(this,false));
 	}
 

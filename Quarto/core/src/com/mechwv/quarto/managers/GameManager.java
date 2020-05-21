@@ -279,6 +279,7 @@ public class GameManager {
                 musicPlay.setVisible(false);
                 music_noplay.setVisible(true);
                 music_noplay.setDisabled(false);
+                game.music_play = false;
                 }
         });
 
@@ -297,6 +298,8 @@ public class GameManager {
                 musicPlay.setVisible(true);
                 music_noplay.setVisible(false);
                 music_noplay.setDisabled(true);
+                game.music_play = true;
+                game.music.play();
             }
         });
 
