@@ -1,6 +1,7 @@
 package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -35,12 +36,15 @@ public class MainMenuScreen implements Screen {
     private Texture background;
     private Music SFXClick;
 
+    private boolean back = true;
 
-    public MainMenuScreen(final GameRoot game){
+
+    public MainMenuScreen(final GameRoot game, boolean backpressed){
 
         //Set up our assets
         this.game = game;
 
+        Gdx.input.setCatchKey(Input.Keys.BACK,true);
         game.screenx = Gdx.graphics.getWidth();
         game.screeny = Gdx.graphics.getHeight();
         camera = new OrthographicCamera();
@@ -48,11 +52,16 @@ public class MainMenuScreen implements Screen {
         viewport.setCamera(camera);
         stage = new Stage(viewport,game.spriteBatch);
 
+        if (backpressed){
+            back = false;
+        }
         Gdx.input.setInputProcessor(stage);
+
         myTexture = game.assets.manager.get(game.assets.multiplayer);
         myTextureRegion = new TextureRegion(myTexture);
         Drawable drawable = new TextureRegionDrawable(myTextureRegion);
         singlePButton = new ImageButton(drawable);
+        singlePButton.setDisabled(true);
         singlePButton.setPosition((160),(250));
         singlePButton.addListener(new ChangeListener(){
             @Override
@@ -69,14 +78,13 @@ public class MainMenuScreen implements Screen {
         myTextureRegion = new TextureRegion(myTexture);
         drawable = new TextureRegionDrawable(myTextureRegion);
         multiPButton = new ImageButton(drawable);
+        multiPButton.setDisabled(true);
         multiPButton.setPosition((40),(560));
         multiPButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 SFXClick.play();
                 Gdx.app.log("RRRRR", "click1");
-//                menuMusic.stop();
-//                menuMusic.setLooping(false);
                 game.setScreen(new HotSeatScreen(game));
                 dispose();
             }
@@ -86,29 +94,31 @@ public class MainMenuScreen implements Screen {
         stage.addActor(multiPButton);
 
         SFXClick = game.assets.manager.get(game.assets.SFXclick);
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void show() {
-        render(0);
+
     }
 
     @Override
     public void render(float delta) {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
         game.spriteBatch.setProjectionMatrix(camera.combined);
         game.spriteBatch.begin();
         game.spriteBatch.draw(background, 0, 0,game.virtual_screen_width,game.virtual_screen_height);
-        //game.font.draw(game.spriteBatch, "X =" +  game.screenx, 10, 100);
-        //game.font.draw(game.spriteBatch, "Y =" + game.screeny, 10, 200);
         game.spriteBatch.end();
-
+        singlePButton.setDisabled(false);
+        multiPButton.setDisabled(false);
+        exit();
         stage.draw();
-        
-
     }
 
     @Override
@@ -119,6 +129,13 @@ public class MainMenuScreen implements Screen {
     @Override
     public void pause() {
 
+    }
+    private void exit(){
+        if((Gdx.input.isKeyJustPressed(Input.Keys.BACK)) && (back)){
+            Gdx.app.exit();
+            System.exit(0);
+        }
+        else back = true;
     }
 
     @Override
@@ -135,4 +152,5 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
         stage.clear();
     }
+
 }

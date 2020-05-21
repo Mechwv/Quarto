@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mechwv.quarto.GameRoot;
-import com.mechwv.quarto.screens.MainMenuScreen;
 
 
 public class GameManager {
@@ -35,7 +34,6 @@ public class GameManager {
     private ImageButton FigureLSNW;
     private ImageButton black;
     private ImageButton white;
-    private ImageButton retry;
     private ImageButton musicPlay;
     private ImageButton music_noplay;
     private ImageButton rules;
@@ -82,12 +80,13 @@ public class GameManager {
     public void update(){
         setupButtons();
         setupMisc();
+        setFigureChosen("0");
+        game.turn = 1;
     }
 
     private void setupButtons(){
         atlas = game.assets.manager.get(game.assets.figure_pack);
         skin = new Skin(atlas);
-
 
         FigureHRHB = new ImageButton(skin.getDrawable("FigureHRHB"));
         FigureHRHB.setPosition(100,50);
@@ -267,25 +266,9 @@ public class GameManager {
             }
         });
 
-        Texture texture = game.assets.manager.get(game.assets.play_again);
+        Texture texture = game.assets.manager.get(game.assets.sound_on);
         TextureRegion textureRegion = new TextureRegion(texture);
         Drawable drawable = new TextureRegionDrawable(textureRegion);
-        retry = new ImageButton(drawable);
-        retry.setPosition(( game.virtual_screen_width/2- retry.getWidth()/2),( game.virtual_screen_width/2+200));
-        retry.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                SFXClick.play();
-                retry.remove();
-                game.setScreen(new MainMenuScreen(game));
-                update();
-            }
-        });
-
-
-        texture = game.assets.manager.get(game.assets.sound_on);
-        textureRegion = new TextureRegion(texture);
-        drawable = new TextureRegionDrawable(textureRegion);
         musicPlay = new ImageButton(drawable);
         musicPlay.setPosition(10,1700);
         musicPlay.addListener(new ChangeListener() {
@@ -296,6 +279,7 @@ public class GameManager {
                 musicPlay.setVisible(false);
                 music_noplay.setVisible(true);
                 music_noplay.setDisabled(false);
+                game.music_play = false;
                 }
         });
 
@@ -314,6 +298,8 @@ public class GameManager {
                 musicPlay.setVisible(true);
                 music_noplay.setVisible(false);
                 music_noplay.setDisabled(true);
+                game.music_play = true;
+                game.music.play();
             }
         });
 
@@ -330,6 +316,7 @@ public class GameManager {
                 svitok.setVisible(true);
                 svitok.setDisabled(false);
                 rules.setVisible(false);
+
             }
         });
 
@@ -453,10 +440,6 @@ public class GameManager {
 
     public ImageButton getBlack() {
         return black;
-    }
-
-    public ImageButton getRetry() {
-        return retry;
     }
 
     public ImageButton getWhite() {
@@ -617,9 +600,9 @@ public class GameManager {
         return svitok;
     }
 
-
     public ImageButton getMusic_noplay() {
         return music_noplay;
     }
+
 
 }

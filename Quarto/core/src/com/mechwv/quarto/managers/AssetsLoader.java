@@ -17,11 +17,11 @@ public class AssetsLoader {
     public final String  Bgr = "images/volodya_hudojnik/background_final.jpg";
     public final String  settings = "images/buttons/shesternya.png";
     public final String  singleplayer = "images/buttons/single_player_2.png";
-    public final String  retry = "images/turns&ending/play_again.png";
+    public final String  retry = "images/turns&ending/Main menu2.png";
     public final String  black = "images/Circle_B.png";
     public final String  white = "images/Circle_W.png";
-    public final String  gameplayMusic = "sounds/GameplayMusic.wav";
-    public final String  menuMusic = "sounds/MenuMusic.wav";
+    public final String  gameplayMusic = "sounds/GameplayMusic.mp3";
+    public final String  menuMusic = "sounds/MenuMusic.mp3";
 
     public final String  scroll = "images/buttons/knopkasvitka.png";
     public final String  rules = "images/buttons/rules3.png";
@@ -30,7 +30,7 @@ public class AssetsLoader {
 
 
     public final String hotseat = "images/Hotseat.png";
-    public final String play_again = "images/play_again.png";
+    public final String play_again = "images/turns&ending/Main menu2.png";
     public final String return_back = "images/return.png";
     public final String you_lose = "images/turns&ending/you lose2.png";
     public final String you_win = "images/turns&ending/you win2.png";

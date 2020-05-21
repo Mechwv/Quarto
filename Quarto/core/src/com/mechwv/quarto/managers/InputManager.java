@@ -5,18 +5,15 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.mechwv.quarto.gameplay.FigurePlace;
-import com.mechwv.quarto.objects.Board;
 
 public class InputManager extends InputAdapter {
     OrthographicCamera camera;
     static Vector3 temp = new Vector3();
-    private GameManager gm;
-    private ImageButton btn;
-    private String name;
-    private Board board;
     private Vector2 coord = new Vector2();
+    private int touches = 0;
+
+
+
     public InputManager(OrthographicCamera camera) {
         this.camera = camera;
     }
@@ -34,6 +31,7 @@ public class InputManager extends InputAdapter {
 
     @Override
     public boolean touchUp (int screenX, int screenY, int pointer, int button) {
+        touches++;
         return false;
     }
 
@@ -51,5 +49,11 @@ public class InputManager extends InputAdapter {
     }
     public float getCoordY(){
         return coord.y;
+    }
+    public int getTouches() {
+        return touches;
+    }
+    public void setTouches(int touches) {
+        this.touches = touches;
     }
 }

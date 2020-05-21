@@ -1,6 +1,7 @@
 package com.mechwv.quarto.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -42,11 +43,10 @@ public class MultiplayerScreen implements Screen {
     private OrthographicCamera camera;
     private Viewport viewport;
     private Texture wooden_field;
-    private Music gameplayMusic;
     private Texture board;
     private Texture turn_texture;
     private Sprite chosen_figure;
-
+    private Texture texture = null;
 
     private ImageButton FigureHRHB;
     private ImageButton FigureHRNB;
@@ -69,7 +69,6 @@ public class MultiplayerScreen implements Screen {
 
     private ImageButton black;
     private ImageButton white;
-    private ImageButton sound;
     private ImageButton rules;
     private ImageButton musicPlay;
     private ImageButton musicNoplay;
@@ -82,9 +81,8 @@ public class MultiplayerScreen implements Screen {
 
     private Board playboard;
 
-    private boolean choosing = true;
     private boolean moving = false;
-    private boolean player_1_won = false;
+    private boolean end = false;
 
     FigurePlace fp = new FigurePlace();
     WinFinder wf = new WinFinder();
@@ -96,7 +94,6 @@ public class MultiplayerScreen implements Screen {
     private Vector2 place = new Vector2();
     private double angle;
 
-    private boolean match_status;
     private io.socket.client.Socket socket;
     private int player;
     private String room;
@@ -115,13 +112,28 @@ public class MultiplayerScreen implements Screen {
         this.room = room;
 
         prepare();
-        gameplayMusic = game.gm.getGameplayMusic();
-        gameplayMusic.play();
-        gameplayMusic.setLooping(true);
+
+        texture = game.assets.manager.get(game.assets.you_win);
+        game.music = game.gm.getGameplayMusic();
+        if (!game.music_play) {
+            musicNoplay.setVisible(true);
+            musicNoplay.setDisabled(false);
+            musicPlay.setVisible(false);
+            musicPlay.setDisabled(true);
+        } else {
+            musicNoplay.setVisible(false);
+            musicNoplay.setDisabled(true);
+            musicPlay.setVisible(true);
+            musicPlay.setDisabled(false);
+            game.music.setVolume(0.5f);
+            game.music.play();
+        }
         playboard = new Board();
         game.im = new InputManager(camera);
         boardInit();
         getInfoEvents();
+
+
     }
 
     private void update(){
@@ -140,8 +152,6 @@ public class MultiplayerScreen implements Screen {
         Gdx.app.log("SocketIO", "Turn sent: " + game.turn);
         socket.emit("turnUpdate", room, game.turn);
     }
-
-
 
     private void prepare(){
         wooden_field = game.gm.getWooden_field();
@@ -248,28 +258,34 @@ public class MultiplayerScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         checkButtons();
-        try {
-            check();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        check();
         turndraw();
         camera.update();
         game.spriteBatch.setProjectionMatrix(camera.combined);
         game.spriteBatch.begin();
         game.spriteBatch.draw(wooden_field,0,0);
         game.spriteBatch.draw(board,0,800,1100,1100);
-        game.spriteBatch.draw(turn_texture,0,720);
-        drawBoard();
         draw_chosen(delta);
+        if (!end) {
+            game.spriteBatch.draw(turn_texture,-70,720);
+        }
+        else {
+            game.spriteBatch.draw(texture, 50, 300);
+            Gdx.input.setInputProcessor(game.im);
+            if (Gdx.input.isTouched()){
+                game.setScreen(new MainMenuScreen(game,false));
+                game.gm.update();
+                dispose();
+            }
+        }
+        drawBoard();
         game.font.draw(game.spriteBatch, "Player " + player, 400, 1840);
         game.spriteBatch.end();
         stage.draw();
-
+        backTo();
     }
 
-
-    private void check() throws JSONException {
+    private void check() {
         if (game.turn > 4) game.turn = 1;
         if (player == 1){
             if (game.turn == 1){
@@ -325,6 +341,7 @@ public class MultiplayerScreen implements Screen {
             }
         }
     }
+
     private boolean choose_a_figure(){
         Gdx.input.setInputProcessor(stage);
         figure_chosen = game.gm.getFigureChosen();
@@ -387,16 +404,66 @@ public class MultiplayerScreen implements Screen {
                 fp = new FigurePlace(figure_drawing, playboard, place.x, place.y);
                 if(wf.checkBoard(playboard) == 1) {
                     if (game.turn == 1) {
+                        game.gm.setFigureChosen("0");
+                        update();
                         socket.emit("gameEnd",room, 1);
                     }
-                    else socket.emit("gameEnd",room, 2);
-                    gameplayMusic.stop();
-                    gameplayMusic.setLooping(false);
+                    else {
+                        game.gm.setFigureChosen("0");
+                        update();
+                        socket.emit("gameEnd",room, 2);
+                    }
+                    game.music.stop();
                 } else if (wf.checkBoard(playboard) == 2){
+                    game.gm.setFigureChosen("0");
+                    update();
                     socket.emit("gameEnd",room, 3);
                 }
             }
             game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y,chosen_figure.getRegionWidth()*chosen_scale,chosen_figure.getRegionHeight()*chosen_scale);
+        }
+    }
+
+    private void gameEnd(int winner){
+        Gdx.app.log("SocketIO", "winner is " + winner + " player is "+ player);
+        end = true;
+        game.music.stop();
+        socket.emit("disconnect");
+        win(winner);
+    }
+
+    private void hideButtons(){
+        FigureHRHB.setVisible(false);
+        FigureHRNB.setVisible(false);
+        FigureHSHB.setVisible(false);
+        FigureHSNB.setVisible(false);
+        FigureLRHB.setVisible(false);
+        FigureLRNB.setVisible(false);
+        FigureLSHB.setVisible(false);
+        FigureLSNB.setVisible(false);
+        FigureHRHW.setVisible(false);
+        FigureHRNW.setVisible(false);
+        FigureHSHW.setVisible(false);
+        FigureHSNW.setVisible(false);
+        FigureLRHW.setVisible(false);
+        FigureLRNW.setVisible(false);
+        FigureLSHW.setVisible(false);
+        FigureLSNW.setVisible(false);
+        white.setVisible(false);
+        black.setVisible(false);
+    }
+
+    private void win(int winner){
+        disableButtons();
+        hideButtons();
+        white.setDisabled(true);
+        black.setDisabled(true);
+        if (winner == player)
+            texture = game.assets.manager.get(game.assets.you_win);
+        else
+            texture = game.assets.manager.get(game.assets.you_lose);
+        if (winner == 3){
+            texture = game.assets.manager.get(game.assets.draw);
         }
     }
 
@@ -427,6 +494,10 @@ public class MultiplayerScreen implements Screen {
                     a = a.replace("]","");
                     a = a.replaceAll("[,.]", "");
                     playboard.board = a.split("\\s");
+                    svitok.setDisabled(true);
+                    svitok.setVisible(false);
+                    rules.setVisible(true);
+                    rules.setDisabled(false);
                     Gdx.app.log("SocketIO", "Array = " + Arrays.toString(playboard.board));
 
                 } catch (JSONException | DecoderException | IOException | ClassNotFoundException e) {
@@ -440,15 +511,29 @@ public class MultiplayerScreen implements Screen {
                 Gdx.app.log("SocketIO", "Got info");
                 try {
                     int winner = data.getInt("winner");
-                    Gdx.app.log("SocketIO", "winner is " + winner + " player is "+ player);
-                    game.setScreen(new MultiplayerEndingScreen(game, winner, player));
-                    socket.emit("disconnect");
-                    dispose();
+                    gameEnd(winner);
+                    figure_chosen = "0";
+                    update();
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error getting info");
                 }
             }
         });
+    }
+
+    private void backTo() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            game.gm.update();
+            Gdx.app.log("SocketIO", " disconnecting...");
+            socket.emit("disconnect");
+            if (player == 1) {
+                socket.emit("gameEnd", room, 2);
+            } else socket.emit("gameEnd", room, 1);
+            socket.disconnect();
+            game.music.stop();
+            game.setScreen(new MainMenuScreen(game, true));
+            dispose();
+        }
     }
 
     private void disableButtons(){
@@ -498,8 +583,6 @@ public class MultiplayerScreen implements Screen {
         }
     }
 
-
-
     private void drawBoard(){
         float scale = 1.0f;
         for (int i = 0; i < 16; i++){
@@ -548,8 +631,7 @@ public class MultiplayerScreen implements Screen {
         moving = true;
     }
 
-    private double angleBetweenPoints(Vector2 a, Vector2 b)
-    {
+    private double angleBetweenPoints(Vector2 a, Vector2 b) {
         Vector2 ab = new Vector2(b.x-a.x,b.y-a.y);
         Vector2 ac = new Vector2(a.x+Math.abs(ab.x),a.y);
         return (Math.PI - Math.acos((ab.x*ac.x+ab.y+ac.y)/(ab.len()*ac.len())));
