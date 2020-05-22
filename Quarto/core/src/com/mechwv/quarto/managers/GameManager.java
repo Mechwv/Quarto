@@ -44,6 +44,7 @@ public class GameManager {
     private Texture end_board;
     private Texture music_on;
     private Texture music_off;
+    private Texture draw_h;
 
     private Music SFXClick;
     private Music menuMusic;
@@ -435,6 +436,7 @@ public class GameManager {
         draw = game.assets.manager.get(game.assets.draw);
         music_on = game.assets.manager.get(game.assets.sound_on);
         music_off = game.assets.manager.get(game.assets.sound_off);
+        draw_h = game.assets.manager.get(game.assets.draw_h);
     }
 
 
@@ -603,6 +605,5 @@ public class GameManager {
     public ImageButton getMusic_noplay() {
         return music_noplay;
     }
-
 
 }

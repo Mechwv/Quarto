@@ -207,11 +207,17 @@ public class HotSeatScreen implements Screen{
         game.spriteBatch.draw(board,0,800,1100,1100);
         if (!end) {
             game.spriteBatch.draw(turn_texture,-70,720);
+            win_check();
         }
-        else
-            game.spriteBatch.draw(texture,200,300);
+        else {
+            game.spriteBatch.draw(texture, 200, 300);
+            if (Gdx.input.isTouched()) {
+                game.gm.update();
+                game.setScreen(new MainMenuScreen(game, false));
+                dispose();
+            }
+        }
         drawBoard();
-        win_check();
         if (!choosing) {
             game.spriteBatch.draw(chosen_figure,current_coords.x,current_coords.y);
         }
@@ -341,14 +347,9 @@ public class HotSeatScreen implements Screen{
             texture = game.assets.manager.get(game.assets.player_2_won);
         }
         if (winner == 3){
-            texture = game.assets.manager.get(game.assets.draw);
+            texture = game.assets.manager.get(game.assets.draw_h);
         }
         game.gm.update();
-        if (Gdx.input.isTouched()) {
-            game.gm.update();
-            game.setScreen(new MainMenuScreen(game, false));
-            dispose();
-        }
     }
 
 
