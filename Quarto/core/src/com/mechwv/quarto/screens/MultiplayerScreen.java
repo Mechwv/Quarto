@@ -115,6 +115,7 @@ public class MultiplayerScreen implements Screen {
 
         texture = game.assets.manager.get(game.assets.you_win);
         game.music = game.gm.getGameplayMusic();
+        game.music.setLooping(true);
         if (!game.music_play) {
             musicNoplay.setVisible(true);
             musicNoplay.setDisabled(false);

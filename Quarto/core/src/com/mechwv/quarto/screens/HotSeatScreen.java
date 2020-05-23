@@ -88,6 +88,7 @@ public class HotSeatScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
         prepare();
         game.music = game.gm.getGameplayMusic();
+        game.music.setLooping(true);
         if (!game.music_play) {
             musicNoplay.setVisible(true);
             musicNoplay.setDisabled(false);
