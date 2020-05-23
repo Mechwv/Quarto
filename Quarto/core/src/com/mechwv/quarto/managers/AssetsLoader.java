@@ -35,6 +35,7 @@ public class AssetsLoader {
     public final String you_lose = "images/turns&ending/you lose2.png";
     public final String you_win = "images/turns&ending/you win2.png";
     public final String draw = "images/turns&ending/draw.png";
+    public final String draw_h = "images/turns&ending/draw5.png";
 
     public final String player_1_choosing = "images/turns&ending/player_1_choosing.png";
     public final String player_2_choosing = "images/turns&ending/player_2_choosing.png";
@@ -63,6 +64,7 @@ public class AssetsLoader {
         manager.load(retry, Texture.class);
         manager.load(player_1_won, Texture.class);
         manager.load(player_2_won, Texture.class);
+        manager.load(draw_h, Texture.class);
 
         manager.load(figure_pack, TextureAtlas.class);
 

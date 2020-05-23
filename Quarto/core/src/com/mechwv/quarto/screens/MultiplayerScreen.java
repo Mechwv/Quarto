@@ -115,6 +115,7 @@ public class MultiplayerScreen implements Screen {
 
         texture = game.assets.manager.get(game.assets.you_win);
         game.music = game.gm.getGameplayMusic();
+        game.music.setLooping(true);
         if (!game.music_play) {
             musicNoplay.setVisible(true);
             musicNoplay.setDisabled(false);
@@ -526,9 +527,11 @@ public class MultiplayerScreen implements Screen {
             game.gm.update();
             Gdx.app.log("SocketIO", " disconnecting...");
             socket.emit("disconnect");
-            if (player == 1) {
-                socket.emit("gameEnd", room, 2);
-            } else socket.emit("gameEnd", room, 1);
+            if (!end) {
+                if (player == 1) {
+                    socket.emit("gameEnd", room, 2);
+                } else socket.emit("gameEnd", room, 1);
+            }
             socket.disconnect();
             game.music.stop();
             game.setScreen(new MainMenuScreen(game, true));
